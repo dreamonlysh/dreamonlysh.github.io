@@ -1,18 +1,104 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mainroad</title><link>/</link><description>Recent content on Mainroad</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 16 Apr 2018 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml"/><item><title>Basic HTML Elements</title><link>/post/basic-elements/</link><pubDate>Mon, 16 Apr 2018 00:00:00 +0000</pubDate><guid>/post/basic-elements/</guid><description>&lt;p>The main purpose of this article is to make sure that all basic HTML Elements are decorated with CSS so as to not miss any possible elements when creating new themes for Hugo.&lt;/p></description></item><item><title>Creating a New Theme</title><link>/post/creating-a-new-theme/</link><pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate><guid>/post/creating-a-new-theme/</guid><description>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&amp;rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&amp;rsquo;t cover using CSS to style your theme.
-We&amp;rsquo;ll start with creating a new site with a very basic template.</description></item><item><title>About Hugo</title><link>/about/</link><pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate><guid>/about/</guid><description>Hugo is a static site engine written in Go.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog for gumeng.</title><link>http://localhost:1313/</link><description>Recent content on Blog for gumeng.</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 10 Jul 2018 00:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml"/><item><title>Theme preview</title><link>http://localhost:1313/post/even-preview/</link><pubDate>Tue, 10 Jul 2018 00:00:00 +0800</pubDate><guid>http://localhost:1313/post/even-preview/</guid><description>Based on MarkdownPreview test.md. Markdown 1 2 3 4 5 6 7 8 # H1 ## H2 ### H3 #### H4 ##### H5 ###### H6 ### Duplicate Header ### Duplicate Header H1 H2 H3 H4 H5 H6 Duplicate Header Duplicate Header Paragraphs 1 2 3 4 This is a paragraph. I am still part of the paragraph. New paragraph. This is a paragraph. I am still part of the paragraph.</description></item><item><title>About</title><link>http://localhost:1313/about/</link><pubDate>Sun, 20 Aug 2017 21:38:52 +0800</pubDate><guid>http://localhost:1313/about/</guid><description>Hugo is a static site engine written in Go.
 It makes use of a variety of open source projects including:
-Cobra Viper J Walter Weatherman Cast Learn more and contribute on GitHub.
-Setup Some fun facts about Hugo:
-Built in Go Loosely inspired by Jekyll Primarily developed by spf13 on the train while commuting to and from Manhattan. Coded in Vim using spf13-vim Have questions or suggestions?</description></item><item><title>(Hu)go Template Primer</title><link>/post/goisforlovers/</link><pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate><guid>/post/goisforlovers/</guid><description>&lt;p>Hugo uses the excellent &lt;a href="https://golang.org/">Go&lt;/a> &lt;a href="https://golang.org/pkg/html/template/">html/template&lt;/a> library for
-its template engine. It is an extremely lightweight engine that provides a very
-small amount of logic. In our experience that it is just the right amount of
-logic to be able to create a good static website. If you have used other
-template systems from different languages or frameworks you will find a lot of
-similarities in Go templates.&lt;/p></description></item><item><title>Getting Started with Hugo</title><link>/post/hugoisforlovers/</link><pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate><guid>/post/hugoisforlovers/</guid><description>Step 1. Install Hugo Go to Hugo releases and download the appropriate version for your OS and architecture.
-Save it somewhere specific as we will be using it in the next step.
-More complete instructions are available at Install Hugo
-Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
-Follow the following steps:
-Clone the Hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313 Corresponding pseudo commands:</description></item><item><title>Migrate to Hugo from Jekyll</title><link>/post/migrate-from-jekyll/</link><pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate><guid>/post/migrate-from-jekyll/</guid><description>Move static content to static Jekyll has a rule that any directory not starting with _ will be copied as-is to the _site output. Hugo keeps all static content under static. You should therefore move it all there. With Jekyll, something that looked like
-▾ &amp;lt;root&amp;gt;/ ▾ images/ logo.png should become
-▾ &amp;lt;root&amp;gt;/ ▾ static/ ▾ images/ logo.png Additionally, you&amp;rsquo;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description></item></channel></rss>
+Cobra Viper J Walter Weatherman Cast Learn more and contribute on GitHub.</description></item><item><title>This is a hidden post.</title><link>http://localhost:1313/post/hidden-post/</link><pubDate>Thu, 08 Mar 2018 17:40:19 +0800</pubDate><guid>http://localhost:1313/post/hidden-post/</guid><description>&lt;p>This post is hidden from the home page.&lt;/p></description></item><item><title>[English] Creating a New Theme</title><link>http://localhost:1313/post/english-preview/</link><pubDate>Thu, 31 Aug 2017 15:43:48 +0800</pubDate><guid>http://localhost:1313/post/english-preview/</guid><description>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&amp;rsquo;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&amp;rsquo;t cover using CSS to style your theme.
+We&amp;rsquo;ll start with creating a new site with a very basic template.</description></item><item><title>[日本語] 敬語体系</title><link>http://localhost:1313/post/japanese-preview/</link><pubDate>Wed, 30 Aug 2017 01:53:34 +0800</pubDate><guid>http://localhost:1313/post/japanese-preview/</guid><description>日本語の敬語体系は、一般に、大きく尊敬語・謙譲語・丁寧語に分類される。文化審議会国語分科会は、2007年2月に「敬語の指針」を答申し、これに</description></item><item><title>[中文] 《长恨歌》</title><link>http://localhost:1313/post/chinese-preview/</link><pubDate>Wed, 30 Aug 2017 01:37:56 +0800</pubDate><guid>http://localhost:1313/post/chinese-preview/</guid><description>《长恨歌》是中国唐朝诗人白居易的一首长篇叙事诗。 第一段：贵妃受宠爱 汉皇重色思倾国，御宇多年求不得。杨家有女初长成，养在深闺人未识。 天生丽质难</description></item><item><title>Shortcodes</title><link>http://localhost:1313/post/shortcodes/</link><pubDate>Tue, 30 Aug 2016 16:01:23 +0800</pubDate><guid>http://localhost:1313/post/shortcodes/</guid><description>&lt;h1 id="admonition">Admonition&lt;/h1>
+&lt;div class="admonition note">&lt;p class="admonition-title">I&amp;#39;m title!&lt;/p>
+&lt;p>biu biu biu.&lt;/p>
+&lt;details class="admonition note">&lt;summary class="admonition-title">note&lt;/summary>
+&lt;p>biu biu biu.&lt;/p>
+&lt;/details>
+&lt;div class="admonition example">
+&lt;p>Without title.&lt;/p>
+&lt;/div>
+&lt;/div>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code class="language-markdown" data-lang="markdown">{{% admonition note &amp;#34;I&amp;#39;m title!&amp;#34; false %}}
+biu biu biu.
+{{% admonition type=&amp;#34;note&amp;#34; title=&amp;#34;note&amp;#34; details=&amp;#34;true&amp;#34; %}}
+biu biu biu.
+{{% /admonition %}}
+{{% admonition example %}}
+Without title.
+{{% /admonition %}}
+{{% /admonition %}}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>JS Flowchart Diagrams</title><link>http://localhost:1313/post/js-flowchart-diagrams/</link><pubDate>Wed, 04 Mar 2015 21:57:50 +0800</pubDate><guid>http://localhost:1313/post/js-flowchart-diagrams/</guid><description>&lt;h2 id="usage">Usage&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">st=&amp;gt;start: Start|past:&amp;gt;http://www.google.com[blank]
+e=&amp;gt;end: End:&amp;gt;http://www.google.com
+op1=&amp;gt;operation: My Operation|past
+op2=&amp;gt;operation: Stuff|current
+sub1=&amp;gt;subroutine: My Subroutine|invalid
+cond=&amp;gt;condition: Yes
+or No?|approved:&amp;gt;http://www.google.com
+c2=&amp;gt;condition: Good idea|rejected
+io=&amp;gt;inputoutput: catch something...|request
+st-&amp;gt;op1(right)-&amp;gt;cond
+cond(yes, right)-&amp;gt;c2
+cond(no)-&amp;gt;sub1(left)-&amp;gt;op1
+c2(yes)-&amp;gt;io-&amp;gt;e
+c2(no)-&amp;gt;op2-&amp;gt;e
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>JS Sequence Diagrams</title><link>http://localhost:1313/post/js-sequence-diagrams/</link><pubDate>Wed, 04 Mar 2015 21:57:45 +0800</pubDate><guid>http://localhost:1313/post/js-sequence-diagrams/</guid><description>&lt;h2 id="usage">Usage&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code class="language-fallback" data-lang="fallback">Andrew-&amp;gt;China: Says Hello
+Note right of China: China thinks\nabout it
+China--&amp;gt;Andrew: How are you?
+Andrew-&amp;gt;&amp;gt;China: I am good thanks!
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Syntax Highlighting</title><link>http://localhost:1313/post/syntax-highlighting/</link><pubDate>Tue, 30 Aug 2011 16:01:23 +0800</pubDate><guid>http://localhost:1313/post/syntax-highlighting/</guid><description>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="kd">function&lt;/span> &lt;span class="nx">helloWorld&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">alert&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Hello, World!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>
