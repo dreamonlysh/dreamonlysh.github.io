@@ -1,0 +1,575 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>GN Overview - Blog for gumeng.</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="孤梦"><meta name=description content="Overview 定义一个工具链配置，配置名为&amp;quot;gcc&amp;quot; 1 toolchain(&amp;#34;gcc&amp;#34;) { 工具链中工具配置(tool) 1 tool(&amp;#34;cc&amp;#34;) { Compiler tools所支持头文件依赖(编译依赖."><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.83.1 with theme even"><link rel=canonical href=http://localhost:1313/post/pg_ci/build/gn/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="GN Overview"><meta property="og:description" content="Overview 定义一个工具链配置，配置名为&#34;gcc&#34; 1 toolchain(&#34;gcc&#34;) { 工具链中工具配置(tool) 1 tool(&#34;cc&#34;) { Compiler tools所支持头文件依赖(编译依赖."><meta property="og:type" content="article"><meta property="og:url" content="http://localhost:1313/post/pg_ci/build/gn/"><meta property="article:section" content="post"><meta property="article:published_time" content="2020-03-22T22:35:26+08:00"><meta property="article:modified_time" content="2020-03-22T22:35:26+08:00"><meta itemprop=name content="GN Overview"><meta itemprop=description content="Overview 定义一个工具链配置，配置名为&#34;gcc&#34; 1 toolchain(&#34;gcc&#34;) { 工具链中工具配置(tool) 1 tool(&#34;cc&#34;) { Compiler tools所支持头文件依赖(编译依赖."><meta itemprop=datePublished content="2020-03-22T22:35:26+08:00"><meta itemprop=dateModified content="2020-03-22T22:35:26+08:00"><meta itemprop=wordCount content="2517"><meta itemprop=keywords content="ci,build,gn,"><meta name=twitter:card content="summary"><meta name=twitter:title content="GN Overview"><meta name=twitter:description content="Overview 定义一个工具链配置，配置名为&#34;gcc&#34; 1 toolchain(&#34;gcc&#34;) { 工具链中工具配置(tool) 1 tool(&#34;cc&#34;) { Compiler tools所支持头文件依赖(编译依赖."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>孤梦</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>孤梦</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>GN Overview</h1><div class=post-meta><span class=post-time>2020-03-22</span><div class=post-category><a href=/categories/ci/>ci</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><a href=#overview>Overview</a></li><li><a href=#key-word>Key Word</a><ul><li><a href=#span-idtooltooltool_name><span id=tool>tool(&ldquo;tool_name&rdquo;)</a></li><li><a href=#span-iddeps-depfiledepsformat><span id=deps>depfile/depsformat</a></li><li><a href=#span-idcommand-cc-command-cccxx><span id=command-cc>command: cc/cxx</a></li><li><a href=#span-iddescription-description><span id=description>description</a></li><li><a href=#span-idoutput-outputs><span id=output>outputs</a></li><li><a href=#span-idrsp-rsp><span id=rsp>rsp</a></li><li><a href=#span-idcommand-arcommand-a><span id=command-ar>command: a</a></li><li><a href=#span-idcommand-so-command-so><span id=command-so>command: so</a></li><li><a href=#link-depend>link depend</a></li><li><a href=#heading>@/$/${}/{{}}</a></li></ul></li><li><a href=#启用toolchain>启用toolchain</a></li><li><a href=#参考>参考</a></li></ul></nav></div></div><div class=post-content><h1 id=overview>Overview</h1><ol><li>定义一个工具链配置，配置名为"gcc"</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>toolchain</span><span class=p>(</span><span class=s2>&#34;gcc&#34;</span><span class=p>)</span> <span class=p>{</span>
+</code></pre></td></tr></table></div></div><ol start=2><li>工具链中工具配置(<a href=#tool>tool</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>  <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;cc&#34;</span><span class=p>)</span> <span class=p>{</span>
+</code></pre></td></tr></table></div></div><ol start=3><li>Compiler tools所支持头文件依赖(编译依赖<code>.d</code>，<a href=#deps>deps</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>depfile</span> <span class=o>=</span> <span class=s2>&#34;{{output}}.d&#34;</span>
+    <span class=n>depsformat</span> <span class=o>=</span> <span class=s2>&#34;gcc&#34;</span>
+</code></pre></td></tr></table></div></div><ol start=4><li>编译选项(<a href=#command-cc>command: cc/cxx</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;gcc -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_c}} -c {{source}} -o {{output}}&#34;</span>
+</code></pre></td></tr></table></div></div><ol start=5><li>工具链显示(<a href=#description>description</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;CC {{output}}&#34;</span>
+</code></pre></td></tr></table></div></div><ol start=6><li>库文件输出路径(<a href=#outputs>outputs</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>outputs</span> <span class=o>=</span>
+        <span class=p>[</span> <span class=s2>&#34;{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o&#34;</span> <span class=p>]</span>
+</code></pre></td></tr></table></div></div><p>next:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>  <span class=p>}</span>
+
+  <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;cxx&#34;</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>depfile</span> <span class=o>=</span> <span class=s2>&#34;{{output}}.d&#34;</span>
+    <span class=n>depsformat</span> <span class=o>=</span> <span class=s2>&#34;gcc&#34;</span>
+    <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;g++ -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_cc}} -c {{source}} -o {{output}}&#34;</span>
+    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;CXX {{output}}&#34;</span>
+    <span class=n>outputs</span> <span class=o>=</span>
+        <span class=p>[</span> <span class=s2>&#34;{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o&#34;</span> <span class=p>]</span>
+  <span class=p>}</span>
+
+  <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;alink&#34;</span><span class=p>)</span> <span class=p>{</span>
+</code></pre></td></tr></table></div></div><ol start=7><li>关联文件(<a href=#rsp>rsp</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>rspfile</span> <span class=o>=</span> <span class=s2>&#34;{{output}}.rsp&#34;</span>
+    <span class=n>rspfile_content</span> <span class=o>=</span> <span class=s2>&#34;{{inputs}}&#34;</span>
+</code></pre></td></tr></table></div></div><ol start=8><li>编译选项(<a href=#command-a>command: a</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;rm -f {{output}} &amp;&amp; ar rcs {{output}} @$rspfile&#34;</span>
+</code></pre></td></tr></table></div></div><p>next:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;AR {{target_output_name}}{{output_extension}}&#34;</span>
+
+    <span class=n>outputs</span> <span class=o>=</span>
+        <span class=p>[</span> <span class=s2>&#34;{{target_out_dir}}/{{target_output_name}}{{output_extension}}&#34;</span> <span class=p>]</span>
+    <span class=n>default_output_extension</span> <span class=o>=</span> <span class=s2>&#34;.a&#34;</span>
+    <span class=n>output_prefix</span> <span class=o>=</span> <span class=s2>&#34;lib&#34;</span>
+  <span class=p>}</span>
+
+  <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;solink&#34;</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>soname</span> <span class=o>=</span> <span class=s2>&#34;{{target_output_name}}{{output_extension}}&#34;</span>  <span class=c1># e.g. &#34;libfoo.so&#34;.</span>
+    <span class=n>sofile</span> <span class=o>=</span> <span class=s2>&#34;{{output_dir}}/$soname&#34;</span>
+    <span class=n>rspfile</span> <span class=o>=</span> <span class=n>soname</span> <span class=o>+</span> <span class=s2>&#34;.rsp&#34;</span>
+</code></pre></td></tr></table></div></div><ol start=9><li>编译选项(<a href=#command-so>command: so</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;g++ -shared {{ldflags}} -o $sofile -Wl,-soname=$soname @$rspfile&#34;</span>
+    <span class=n>rspfile_content</span> <span class=o>=</span> <span class=s2>&#34;-Wl,--whole-archive {{inputs}} {{solibs}} -Wl,--no-whole-archive {{libs}}&#34;</span>
+</code></pre></td></tr></table></div></div><p>next:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;SOLINK $soname&#34;</span>
+
+    <span class=c1># Use this for {{output_extension}} expansions unless a target manually</span>
+    <span class=c1># overrides it (in which case {{output_extension}} will be what the target</span>
+    <span class=c1># specifies).</span>
+    <span class=n>default_output_extension</span> <span class=o>=</span> <span class=s2>&#34;.so&#34;</span>
+
+    <span class=c1># Use this for {{output_dir}} expansions unless a target manually overrides</span>
+    <span class=c1># it (in which case {{output_dir}} will be what the target specifies).</span>
+    <span class=n>default_output_dir</span> <span class=o>=</span> <span class=s2>&#34;{{root_out_dir}}&#34;</span>
+
+    <span class=n>outputs</span> <span class=o>=</span> <span class=p>[</span> <span class=n>sofile</span> <span class=p>]</span>
+</code></pre></td></tr></table></div></div><ol start=10><li>连接依赖(<a href=#link-depend>link_depend</a>)</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>link_output</span> <span class=o>=</span> <span class=n>sofile</span>
+    <span class=n>depend_output</span> <span class=o>=</span> <span class=n>sofile</span>
+</code></pre></td></tr></table></div></div><p>next:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>output_prefix</span> <span class=o>=</span> <span class=s2>&#34;lib&#34;</span>
+  <span class=p>}</span>
+
+  <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;link&#34;</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>outfile</span> <span class=o>=</span> <span class=s2>&#34;{{target_output_name}}{{output_extension}}&#34;</span>
+    <span class=n>rspfile</span> <span class=o>=</span> <span class=s2>&#34;$outfile.rsp&#34;</span>
+    <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;g++ {{ldflags}} -o $outfile -Wl,--start-group @$rspfile {{solibs}} -Wl,--end-group {{libs}}&#34;</span>
+    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;LINK $outfile&#34;</span>
+    <span class=n>default_output_dir</span> <span class=o>=</span> <span class=s2>&#34;{{root_out_dir}}&#34;</span>
+    <span class=n>rspfile_content</span> <span class=o>=</span> <span class=s2>&#34;{{inputs}}&#34;</span>
+    <span class=n>outputs</span> <span class=o>=</span> <span class=p>[</span> <span class=n>outfile</span> <span class=p>]</span>
+  <span class=p>}</span>
+
+  <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;stamp&#34;</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;touch {{output}}&#34;</span>
+    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;STAMP {{output}}&#34;</span>
+  <span class=p>}</span>
+
+  <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;copy&#34;</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;cp -af {{source}} {{output}}&#34;</span>
+    <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;COPY {{source}} {{output}}&#34;</span>
+  <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><h1 id=key-word>Key Word</h1><h2 id=span-idtooltooltool_name><span id=tool>tool(&ldquo;tool_name&rdquo;)</h2><p><strong>gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>   <span class=n>Compiler</span> <span class=n>tools</span><span class=p>:</span>
+     <span class=s2>&#34;cc&#34;</span><span class=p>:</span> <span class=n>C</span> <span class=n>compiler</span>
+     <span class=s2>&#34;cxx&#34;</span><span class=p>:</span> <span class=n>C</span><span class=o>++</span> <span class=n>compiler</span>
+     <span class=s2>&#34;objc&#34;</span><span class=p>:</span> <span class=n>Objective</span> <span class=n>C</span> <span class=n>compiler</span>
+     <span class=s2>&#34;objcxx&#34;</span><span class=p>:</span> <span class=n>Objective</span> <span class=n>C</span><span class=o>++</span> <span class=n>compiler</span>
+     <span class=s2>&#34;rc&#34;</span><span class=p>:</span> <span class=n>Resource</span> <span class=n>compiler</span> <span class=p>(</span><span class=n>Windows</span> <span class=o>.</span><span class=n>rc</span> <span class=n>files</span><span class=p>)</span>
+     <span class=s2>&#34;asm&#34;</span><span class=p>:</span> <span class=n>Assembler</span>
+
+   <span class=n>Linker</span> <span class=n>tools</span><span class=p>:</span>
+     <span class=s2>&#34;alink&#34;</span><span class=p>:</span> <span class=n>Linker</span> <span class=k>for</span> <span class=n>static</span> <span class=n>libraries</span> <span class=p>(</span><span class=n>archives</span><span class=p>)</span>
+     <span class=s2>&#34;solink&#34;</span><span class=p>:</span> <span class=n>Linker</span> <span class=k>for</span> <span class=n>shared</span> <span class=n>libraries</span>
+     <span class=s2>&#34;link&#34;</span><span class=p>:</span> <span class=n>Linker</span> <span class=k>for</span> <span class=n>executables</span>
+
+   <span class=n>Other</span> <span class=n>tools</span><span class=p>:</span>
+     <span class=s2>&#34;stamp&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=k>for</span> <span class=n>creating</span> <span class=n>stamp</span> <span class=n>files</span>
+     <span class=s2>&#34;copy&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=n>to</span> <span class=n>copy</span> <span class=n>files</span><span class=o>.</span>
+     <span class=s2>&#34;action&#34;</span><span class=p>:</span> <span class=n>Defaults</span> <span class=k>for</span> <span class=n>actions</span>
+
+   <span class=n>Platform</span> <span class=n>specific</span> <span class=n>tools</span><span class=p>:</span>
+     <span class=s2>&#34;copy_bundle_data&#34;</span><span class=p>:</span> <span class=p>[</span><span class=n>iOS</span><span class=p>,</span> <span class=n>macOS</span><span class=p>]</span> <span class=n>Tool</span> <span class=n>to</span> <span class=n>copy</span> <span class=n>files</span> <span class=ow>in</span> <span class=n>a</span> <span class=n>bundle</span><span class=o>.</span>
+     <span class=s2>&#34;compile_xcassets&#34;</span><span class=p>:</span> <span class=p>[</span><span class=n>iOS</span><span class=p>,</span> <span class=n>macOS</span><span class=p>]</span> <span class=n>Tool</span> <span class=n>to</span> <span class=nb>compile</span> <span class=n>asset</span> <span class=n>catalogs</span><span class=o>.</span>
+
+   <span class=n>Rust</span> <span class=n>tools</span><span class=p>:</span>
+     <span class=s2>&#34;rust_bin&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=k>for</span> <span class=n>compiling</span> <span class=n>Rust</span> <span class=n>binaries</span>
+     <span class=s2>&#34;rust_cdylib&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=k>for</span> <span class=n>compiling</span> <span class=n>C</span><span class=o>-</span><span class=n>compatible</span> <span class=n>dynamic</span> <span class=n>libraries</span><span class=o>.</span>
+     <span class=s2>&#34;rust_dylib&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=k>for</span> <span class=n>compiling</span> <span class=n>Rust</span> <span class=n>dynamic</span> <span class=n>libraries</span><span class=o>.</span>
+     <span class=s2>&#34;rust_macro&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=k>for</span> <span class=n>compiling</span> <span class=n>Rust</span> <span class=n>procedural</span> <span class=n>macros</span><span class=o>.</span>
+     <span class=s2>&#34;rust_rlib&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=k>for</span> <span class=n>compiling</span> <span class=n>Rust</span> <span class=n>libraries</span><span class=o>.</span>
+     <span class=s2>&#34;rust_staticlib&#34;</span><span class=p>:</span> <span class=n>Tool</span> <span class=k>for</span> <span class=n>compiling</span> <span class=n>Rust</span> <span class=n>static</span> <span class=n>libraries</span><span class=o>.</span>
+</code></pre></td></tr></table></div></div></blockquote><h2 id=span-iddeps-depfiledepsformat><span id=deps>depfile/depsformat</h2><p><strong>gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>depfile</span>  <span class=p>[</span><span class=n>string</span> <span class=k>with</span> <span class=n>substitutions</span><span class=p>]</span>
+        <span class=n>Valid</span> <span class=k>for</span><span class=p>:</span> <span class=n>compiler</span> <span class=n>tools</span> <span class=p>(</span><span class=n>optional</span><span class=p>)</span>
+
+        <span class=n>If</span> <span class=n>the</span> <span class=n>tool</span> <span class=n>can</span> <span class=n>write</span> <span class=s2>&#34;.d&#34;</span> <span class=n>files</span><span class=p>,</span> <span class=n>this</span> <span class=n>specifies</span> <span class=n>the</span> <span class=n>name</span> <span class=n>of</span> <span class=n>the</span>
+        <span class=n>resulting</span> <span class=nb>file</span><span class=o>.</span> <span class=n>These</span> <span class=n>files</span> <span class=n>are</span> <span class=n>used</span> <span class=n>to</span> <span class=nb>list</span> <span class=n>header</span> <span class=nb>file</span> <span class=n>dependencies</span>
+        <span class=p>(</span><span class=ow>or</span> <span class=n>other</span> <span class=n>implicit</span> <span class=nb>input</span> <span class=n>dependencies</span><span class=p>)</span> <span class=n>that</span> <span class=n>are</span> <span class=n>discovered</span> <span class=n>at</span> <span class=n>build</span>
+        <span class=n>time</span><span class=o>.</span> <span class=n>See</span> <span class=n>also</span> <span class=s2>&#34;depsformat&#34;</span><span class=o>.</span>
+
+        <span class=n>Example</span><span class=p>:</span> <span class=n>depfile</span> <span class=o>=</span> <span class=s2>&#34;{{output}}.d&#34;</span>
+
+    <span class=n>depsformat</span>  <span class=p>[</span><span class=n>string</span><span class=p>]</span>
+        <span class=n>Valid</span> <span class=k>for</span><span class=p>:</span> <span class=n>compiler</span> <span class=n>tools</span> <span class=p>(</span><span class=n>when</span> <span class=n>depfile</span> <span class=ow>is</span> <span class=n>specified</span><span class=p>)</span>
+
+        <span class=n>Format</span> <span class=k>for</span> <span class=n>the</span> <span class=n>deps</span> <span class=n>outputs</span><span class=o>.</span> <span class=n>This</span> <span class=ow>is</span> <span class=n>either</span> <span class=s2>&#34;gcc&#34;</span> <span class=ow>or</span> <span class=s2>&#34;msvc&#34;</span><span class=o>.</span> <span class=n>See</span> <span class=n>the</span>
+        <span class=n>ninja</span> <span class=n>documentation</span> <span class=k>for</span> <span class=s2>&#34;deps&#34;</span> <span class=k>for</span> <span class=n>more</span> <span class=n>information</span><span class=o>.</span>
+
+        <span class=n>Example</span><span class=p>:</span> <span class=n>depsformat</span> <span class=o>=</span> <span class=s2>&#34;gcc&#34;</span>
+</code></pre></td></tr></table></div></div></blockquote><p><strong>gcc &ndash;help</strong></p><blockquote><p>-MD Write a depfile containing user and system headers
+-MF <file>Write depfile output from -MMD, -MD, -MM, or -M to <file>-MG Add missing headers to depfile
+-MJ <value>Write a compilation database entry per input
+-MMD Write a depfile containing user headers
+-MM Like -MMD, but also implies -E and writes to stdout by default
+-MP Create phony target for each dependency (other than main file)
+-MQ <value>Specify name of main file output to quote in depfile
+-MT <value>Specify name of main file output in depfile
+-MV Use NMake/Jom format for the depfile
+-M Like -MD, but also implies -E and writes to stdout by default</p></blockquote><p>紧随其后的<code>command</code>，包含编译选项<code>-MMD -MF $depfile</code>，即生成包含依赖用户头文件的<code>{{output}}.d</code>文件。</p><p>方舟编译器中的编译选项为<code>-MD -MT {{output}} -MF $depfile</code>，即生成包含依赖用户和系统头文件的<code>{{output}}.d</code>文件，同时<code>-MT</code>指定<code>{{output}}.d</code>中的主文件名为<code>{{output}}</code>，取代<code>{{output}}.o</code>。</p><h2 id=span-idcommand-cc-command-cccxx><span id=command-cc>command: cc/cxx</h2><p><strong>gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>  <span class=n>Compiler</span> <span class=n>tools</span> <span class=n>have</span> <span class=n>the</span> <span class=n>notion</span> <span class=n>of</span> <span class=n>a</span> <span class=n>single</span> <span class=nb>input</span> <span class=ow>and</span> <span class=n>a</span> <span class=n>single</span> <span class=n>output</span><span class=p>,</span> <span class=n>along</span>
+  <span class=k>with</span> <span class=n>a</span> <span class=nb>set</span> <span class=n>of</span> <span class=n>compiler</span><span class=o>-</span><span class=n>specific</span> <span class=n>flags</span><span class=o>.</span> <span class=n>The</span> <span class=n>following</span> <span class=n>expansions</span> <span class=n>are</span>
+  <span class=n>available</span><span class=p>:</span>
+
+    <span class=p>{{</span><span class=n>asmflags</span><span class=p>}}</span>
+    <span class=p>{{</span><span class=n>cflags</span><span class=p>}}</span>
+    <span class=p>{{</span><span class=n>cflags_c</span><span class=p>}}</span>
+    <span class=p>{{</span><span class=n>cflags_cc</span><span class=p>}}</span>
+    <span class=p>{{</span><span class=n>cflags_objc</span><span class=p>}}</span>
+    <span class=p>{{</span><span class=n>cflags_objcc</span><span class=p>}}</span>
+    <span class=p>{{</span><span class=n>defines</span><span class=p>}}</span>
+    <span class=p>{{</span><span class=n>include_dirs</span><span class=p>}}</span>
+        <span class=n>Strings</span> <span class=n>correspond</span> <span class=n>that</span> <span class=n>to</span> <span class=n>the</span> <span class=n>processed</span> <span class=n>flags</span><span class=o>/</span><span class=n>defines</span><span class=o>/</span><span class=n>include</span>
+        <span class=n>directories</span> <span class=n>specified</span> <span class=k>for</span> <span class=n>the</span> <span class=n>target</span><span class=o>.</span>
+        <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;--enable-foo --enable-bar&#34;</span>
+
+        <span class=n>Defines</span> <span class=n>will</span> <span class=n>be</span> <span class=n>prefixed</span> <span class=n>by</span> <span class=s2>&#34;-D&#34;</span> <span class=ow>and</span> <span class=n>include</span> <span class=n>directories</span> <span class=n>will</span> <span class=n>be</span>
+        <span class=n>prefixed</span> <span class=n>by</span> <span class=s2>&#34;-I&#34;</span> <span class=p>(</span><span class=n>these</span> <span class=n>work</span> <span class=k>with</span> <span class=n>Posix</span> <span class=n>tools</span> <span class=k>as</span> <span class=n>well</span> <span class=k>as</span> <span class=n>Microsoft</span>
+        <span class=n>ones</span><span class=p>)</span><span class=o>.</span>
+</code></pre></td></tr></table></div></div></blockquote><p><strong>gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=p>{{</span><span class=n>output</span><span class=p>}}</span>
+        <span class=n>The</span> <span class=n>relative</span> <span class=n>path</span> <span class=ow>and</span> <span class=n>name</span> <span class=n>of</span> <span class=n>the</span> <span class=n>output</span><span class=p>(</span><span class=n>s</span><span class=p>)</span> <span class=n>of</span> <span class=n>the</span> <span class=n>current</span> <span class=n>build</span> <span class=n>step</span><span class=o>.</span>
+        <span class=n>If</span> <span class=n>there</span> <span class=ow>is</span> <span class=n>more</span> <span class=n>than</span> <span class=n>one</span> <span class=n>output</span><span class=p>,</span> <span class=n>this</span> <span class=n>will</span> <span class=n>expand</span> <span class=n>to</span> <span class=n>a</span> <span class=nb>list</span> <span class=n>of</span> <span class=nb>all</span> <span class=n>of</span>
+        <span class=n>them</span><span class=o>.</span> <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;out/base/my_file.o&#34;</span>
+
+    <span class=p>{{</span><span class=n>source</span><span class=p>}}</span>
+        <span class=n>The</span> <span class=n>relative</span> <span class=n>path</span> <span class=ow>and</span> <span class=n>name</span> <span class=n>of</span> <span class=n>the</span> <span class=n>current</span> <span class=nb>input</span> <span class=nb>file</span><span class=o>.</span>
+        <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;../../base/my_file.cc&#34;</span>
+</code></pre></td></tr></table></div></div></blockquote><p><strong>gcc &ndash;help</strong></p><blockquote><p>-c Only run preprocess, compile, and assemble steps
+-D <macro>=<value> Define <macro>to <value>(or 1 if <value>omitted)
+-I <dir>Add directory to include search path</p></blockquote><h2 id=span-iddescription-description><span id=description>description</h2><p><strong>gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>description</span>  <span class=p>[</span><span class=n>string</span> <span class=k>with</span> <span class=n>substitutions</span><span class=p>,</span> <span class=n>optional</span><span class=p>]</span>
+        <span class=n>Valid</span> <span class=k>for</span><span class=p>:</span> <span class=nb>all</span> <span class=n>tools</span>
+
+        <span class=n>What</span> <span class=n>to</span> <span class=k>print</span> <span class=n>when</span> <span class=n>the</span> <span class=n>command</span> <span class=ow>is</span> <span class=n>run</span><span class=o>.</span>
+
+        <span class=n>Example</span><span class=p>:</span> <span class=n>description</span> <span class=o>=</span> <span class=s2>&#34;Compiling {{source}}&#34;</span>
+</code></pre></td></tr></table></div></div></blockquote><h2 id=span-idoutput-outputs><span id=output>outputs</h2><p>** gn reference**</p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>   <span class=n>outputs</span>  <span class=p>[</span><span class=nb>list</span> <span class=n>of</span> <span class=n>strings</span> <span class=k>with</span> <span class=n>substitutions</span><span class=p>]</span>
+       <span class=n>Valid</span> <span class=k>for</span><span class=p>:</span> <span class=n>Linker</span> <span class=ow>and</span> <span class=n>compiler</span> <span class=n>tools</span> <span class=p>(</span><span class=n>required</span><span class=p>)</span>
+
+       <span class=n>An</span> <span class=n>array</span> <span class=n>of</span> <span class=n>names</span> <span class=k>for</span> <span class=n>the</span> <span class=n>output</span> <span class=n>files</span> <span class=n>the</span> <span class=n>tool</span> <span class=n>produces</span><span class=o>.</span> <span class=n>These</span> <span class=n>are</span>
+       <span class=n>relative</span> <span class=n>to</span> <span class=n>the</span> <span class=n>build</span> <span class=n>output</span> <span class=n>directory</span><span class=o>.</span> <span class=n>There</span> <span class=n>must</span> <span class=n>always</span> <span class=n>be</span> <span class=n>at</span> <span class=n>least</span>
+       <span class=n>one</span> <span class=n>output</span> <span class=nb>file</span><span class=o>.</span> <span class=n>There</span> <span class=n>can</span> <span class=n>be</span> <span class=n>more</span> <span class=n>than</span> <span class=n>one</span> <span class=n>output</span> <span class=p>(</span><span class=n>a</span> <span class=n>linker</span> <span class=n>might</span>
+       <span class=n>produce</span> <span class=n>a</span> <span class=n>library</span> <span class=ow>and</span> <span class=n>an</span> <span class=kn>import</span> <span class=nn>library</span><span class=o>,</span> <span class=nn>for</span> <span class=nn>example</span><span class=p>)</span><span class=o>.</span>
+
+       <span class=n>This</span> <span class=n>array</span> <span class=n>just</span> <span class=n>declares</span> <span class=n>to</span> <span class=n>GN</span> <span class=n>what</span> <span class=n>files</span> <span class=n>the</span> <span class=n>tool</span> <span class=n>will</span> <span class=n>produce</span><span class=o>.</span> <span class=n>It</span> <span class=ow>is</span>
+       <span class=n>your</span> <span class=n>responsibility</span> <span class=n>to</span> <span class=n>specify</span> <span class=n>the</span> <span class=n>tool</span> <span class=n>command</span> <span class=n>that</span> <span class=n>actually</span> <span class=n>produces</span>
+       <span class=n>these</span> <span class=n>files</span><span class=o>.</span>
+
+       <span class=n>If</span> <span class=n>you</span> <span class=n>specify</span> <span class=n>more</span> <span class=n>than</span> <span class=n>one</span> <span class=n>output</span> <span class=k>for</span> <span class=n>shared</span> <span class=n>library</span> <span class=n>links</span><span class=p>,</span> <span class=n>you</span>
+       <span class=n>should</span> <span class=n>consider</span> <span class=n>setting</span> <span class=n>link_output</span><span class=p>,</span> <span class=n>depend_output</span><span class=p>,</span> <span class=ow>and</span>
+       <span class=n>runtime_outputs</span><span class=o>.</span>
+
+       <span class=n>Example</span> <span class=k>for</span> <span class=n>a</span> <span class=n>compiler</span> <span class=n>tool</span> <span class=n>that</span> <span class=n>produces</span> <span class=o>.</span><span class=n>obj</span> <span class=n>files</span><span class=p>:</span>
+         <span class=n>outputs</span> <span class=o>=</span> <span class=p>[</span>
+           <span class=s2>&#34;{{source_out_dir}}/{{source_name_part}}.obj&#34;</span>
+         <span class=p>]</span>
+
+       <span class=n>Example</span> <span class=k>for</span> <span class=n>a</span> <span class=n>linker</span> <span class=n>tool</span> <span class=n>that</span> <span class=n>produces</span> <span class=n>a</span> <span class=o>.</span><span class=n>dll</span> <span class=ow>and</span> <span class=n>a</span> <span class=o>.</span><span class=n>lib</span><span class=o>.</span> <span class=n>The</span> <span class=n>use</span> <span class=n>of</span>
+       <span class=p>{{</span><span class=n>target_output_name</span><span class=p>}},</span> <span class=p>{{</span><span class=n>output_extension</span><span class=p>}}</span> <span class=ow>and</span> <span class=p>{{</span><span class=n>output_dir</span><span class=p>}}</span> <span class=n>allows</span>
+       <span class=n>the</span> <span class=n>target</span> <span class=n>to</span> <span class=n>override</span> <span class=n>these</span> <span class=n>values</span><span class=o>.</span>
+         <span class=n>outputs</span> <span class=o>=</span> <span class=p>[</span>
+           <span class=s2>&#34;{{output_dir}}/{{target_output_name}}&#34;</span>
+               <span class=s2>&#34;{{output_extension}}&#34;</span><span class=p>,</span>
+           <span class=s2>&#34;{{output_dir}}/{{target_output_name}}.lib&#34;</span><span class=p>,</span>
+         <span class=p>]</span>
+
+   <span class=p>{{</span><span class=n>source_out_dir</span><span class=p>}}</span>
+       <span class=n>The</span> <span class=n>directory</span> <span class=ow>in</span> <span class=n>the</span> <span class=n>generated</span> <span class=nb>file</span> <span class=ow>and</span> <span class=n>output</span> <span class=n>directories</span><span class=p>,</span>
+       <span class=n>respectively</span><span class=p>,</span> <span class=k>for</span> <span class=n>the</span> <span class=n>current</span> <span class=nb>input</span> <span class=nb>file</span><span class=o>.</span> <span class=n>If</span> <span class=n>the</span> <span class=n>source</span> <span class=nb>file</span> <span class=ow>is</span> <span class=ow>in</span> <span class=n>the</span>
+       <span class=n>same</span> <span class=n>directory</span> <span class=k>as</span> <span class=n>the</span> <span class=n>target</span> <span class=ow>is</span> <span class=n>declared</span> <span class=ow>in</span><span class=p>,</span> <span class=n>they</span> <span class=n>will</span> <span class=n>will</span> <span class=n>be</span> <span class=n>the</span> <span class=n>same</span>
+       <span class=k>as</span> <span class=n>the</span> <span class=s2>&#34;target&#34;</span> <span class=n>versions</span> <span class=n>above</span><span class=o>.</span> <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;gen/base/test&#34;</span>
+
+   <span class=p>{{</span><span class=n>source_name_part</span><span class=p>}}</span>
+       <span class=n>The</span> <span class=n>filename</span> <span class=n>part</span> <span class=n>of</span> <span class=n>the</span> <span class=n>source</span> <span class=nb>file</span> <span class=k>with</span> <span class=n>no</span> <span class=n>directory</span> <span class=ow>or</span> <span class=n>extension</span><span class=o>.</span> <span class=n>This</span>
+       <span class=n>will</span> <span class=n>generally</span> <span class=n>be</span> <span class=n>used</span> <span class=k>for</span> <span class=n>specifying</span> <span class=n>a</span> <span class=n>transformation</span> <span class=kn>from</span> <span class=nn>a</span> <span class=nn>source</span> <span class=nn>file</span>
+       <span class=n>to</span> <span class=n>a</span> <span class=n>destination</span> <span class=nb>file</span> <span class=k>with</span> <span class=n>the</span> <span class=n>same</span> <span class=n>name</span> <span class=n>but</span> <span class=n>different</span> <span class=n>extension</span><span class=o>.</span>
+         <span class=s2>&#34;//foo/bar/baz.txt&#34;</span> <span class=o>=&gt;</span> <span class=s2>&#34;baz&#34;</span>
+
+   <span class=p>{{</span><span class=n>target_output_name</span><span class=p>}}</span>
+       <span class=n>The</span> <span class=n>short</span> <span class=n>name</span> <span class=n>of</span> <span class=n>the</span> <span class=n>current</span> <span class=n>target</span> <span class=k>with</span> <span class=n>no</span> <span class=n>path</span> <span class=n>information</span><span class=p>,</span> <span class=ow>or</span> <span class=n>the</span>
+       <span class=n>value</span> <span class=n>of</span> <span class=n>the</span> <span class=s2>&#34;output_name&#34;</span> <span class=n>variable</span> <span class=k>if</span> <span class=n>one</span> <span class=ow>is</span> <span class=n>specified</span> <span class=ow>in</span> <span class=n>the</span> <span class=n>target</span><span class=o>.</span>
+       <span class=n>This</span> <span class=n>will</span> <span class=n>include</span> <span class=n>the</span> <span class=s2>&#34;output_prefix&#34;</span> <span class=k>if</span> <span class=nb>any</span><span class=o>.</span> <span class=n>See</span> <span class=n>also</span> <span class=p>{{</span><span class=n>label_name</span><span class=p>}}</span><span class=o>.</span>
+
+       <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;libfoo&#34;</span> <span class=k>for</span> <span class=n>the</span> <span class=n>target</span> <span class=n>named</span> <span class=s2>&#34;foo&#34;</span> <span class=ow>and</span> <span class=n>an</span> <span class=n>output</span> <span class=n>prefix</span> <span class=k>for</span>
+       <span class=n>the</span> <span class=n>linker</span> <span class=n>tool</span> <span class=n>of</span> <span class=s2>&#34;lib&#34;</span><span class=o>.</span>
+
+   <span class=p>{{</span><span class=n>output_extension</span><span class=p>}}</span>
+       <span class=n>The</span> <span class=n>value</span> <span class=n>of</span> <span class=n>the</span> <span class=s2>&#34;output_extension&#34;</span> <span class=n>variable</span> <span class=ow>in</span> <span class=n>the</span> <span class=n>target</span><span class=p>,</span> <span class=ow>or</span> <span class=n>the</span>
+       <span class=n>value</span> <span class=n>of</span> <span class=n>the</span> <span class=s2>&#34;default_output_extension&#34;</span> <span class=n>value</span> <span class=ow>in</span> <span class=n>the</span> <span class=n>tool</span> <span class=k>if</span> <span class=n>the</span> <span class=n>target</span>
+       <span class=n>does</span> <span class=ow>not</span> <span class=n>specify</span> <span class=n>an</span> <span class=n>output</span> <span class=n>extension</span><span class=o>.</span>
+       <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;.so&#34;</span>
+</code></pre></td></tr></table></div></div></blockquote><h2 id=span-idrsp-rsp><span id=rsp>rsp</h2><p><strong>gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>rspfile</span>  <span class=p>[</span><span class=n>string</span> <span class=k>with</span> <span class=n>substitutions</span><span class=p>]</span>
+        <span class=n>Valid</span> <span class=k>for</span><span class=p>:</span> <span class=nb>all</span> <span class=n>tools</span> <span class=k>except</span> <span class=s2>&#34;action&#34;</span> <span class=p>(</span><span class=n>optional</span><span class=p>)</span>
+
+        <span class=n>Name</span> <span class=n>of</span> <span class=n>the</span> <span class=n>response</span> <span class=nb>file</span><span class=o>.</span> <span class=n>If</span> <span class=n>empty</span><span class=p>,</span> <span class=n>no</span> <span class=n>response</span> <span class=nb>file</span> <span class=n>will</span> <span class=n>be</span>
+        <span class=n>used</span><span class=o>.</span> <span class=n>See</span> <span class=s2>&#34;rspfile_content&#34;</span><span class=o>.</span>
+
+    <span class=n>rspfile_content</span>  <span class=p>[</span><span class=n>string</span> <span class=k>with</span> <span class=n>substitutions</span><span class=p>]</span>
+        <span class=n>Valid</span> <span class=k>for</span><span class=p>:</span> <span class=nb>all</span> <span class=n>tools</span> <span class=k>except</span> <span class=s2>&#34;action&#34;</span> <span class=p>(</span><span class=n>required</span> <span class=n>when</span> <span class=s2>&#34;rspfile&#34;</span> <span class=ow>is</span> <span class=n>used</span><span class=p>)</span>
+
+        <span class=n>The</span> <span class=n>contents</span> <span class=n>to</span> <span class=n>be</span> <span class=n>written</span> <span class=n>to</span> <span class=n>the</span> <span class=n>response</span> <span class=nb>file</span><span class=o>.</span> <span class=n>This</span> <span class=n>may</span> <span class=n>include</span> <span class=nb>all</span>
+        <span class=ow>or</span> <span class=n>part</span> <span class=n>of</span> <span class=n>the</span> <span class=n>command</span> <span class=n>to</span> <span class=n>send</span> <span class=n>to</span> <span class=n>the</span> <span class=n>tool</span> <span class=n>which</span> <span class=n>allows</span> <span class=n>you</span> <span class=n>to</span> <span class=n>get</span>
+        <span class=n>around</span> <span class=n>OS</span> <span class=n>command</span><span class=o>-</span><span class=n>line</span> <span class=n>length</span> <span class=n>limits</span><span class=o>.</span>
+
+        <span class=n>This</span> <span class=n>example</span> <span class=n>adds</span> <span class=n>the</span> <span class=n>inputs</span> <span class=ow>and</span> <span class=n>libraries</span> <span class=n>to</span> <span class=n>a</span> <span class=n>response</span> <span class=nb>file</span><span class=p>,</span> <span class=n>but</span>
+        <span class=n>passes</span> <span class=n>the</span> <span class=n>linker</span> <span class=n>flags</span> <span class=n>directly</span> <span class=n>on</span> <span class=n>the</span> <span class=n>command</span> <span class=n>line</span><span class=p>:</span>
+          <span class=n>tool</span><span class=p>(</span><span class=s2>&#34;link&#34;</span><span class=p>)</span> <span class=p>{</span>
+            <span class=n>command</span> <span class=o>=</span> <span class=s2>&#34;link -o {{output}} {{ldflags}} @{{output}}.rsp&#34;</span>
+            <span class=n>rspfile</span> <span class=o>=</span> <span class=s2>&#34;{{output}}.rsp&#34;</span>
+            <span class=n>rspfile_content</span> <span class=o>=</span> <span class=s2>&#34;{{inputs}} {{solibs}} {{libs}}&#34;</span>
+          <span class=p>}</span>
+</code></pre></td></tr></table></div></div></blockquote><h2 id=span-idcommand-arcommand-a><span id=command-ar>command: a</h2><p><strong>man ar</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>NAME</span>
+     <span class=n>ar</span> <span class=o>--</span> <span class=n>create</span> <span class=ow>and</span> <span class=n>maintain</span> <span class=n>library</span> <span class=n>archives</span>
+
+<span class=o>-</span><span class=n>c</span>      <span class=n>Whenever</span> <span class=n>an</span> <span class=n>archive</span> <span class=ow>is</span> <span class=n>created</span><span class=p>,</span> <span class=n>an</span> <span class=n>informational</span> <span class=n>message</span> <span class=n>to</span> <span class=n>that</span> <span class=n>effect</span> <span class=ow>is</span> <span class=n>written</span> <span class=n>to</span> <span class=n>standard</span> <span class=n>error</span><span class=o>.</span> <span class=n>If</span> <span class=n>the</span> <span class=o>-</span><span class=n>c</span> <span class=n>option</span> <span class=ow>is</span> <span class=n>specified</span><span class=p>,</span> <span class=n>ar</span> <span class=n>creates</span> <span class=n>the</span> <span class=n>archive</span> <span class=n>silently</span><span class=o>.</span>
+
+<span class=o>-</span><span class=n>r</span>      <span class=n>Replace</span> <span class=ow>or</span> <span class=n>add</span> <span class=n>the</span> <span class=n>specified</span> <span class=n>files</span> <span class=n>to</span> <span class=n>the</span> <span class=n>archive</span><span class=o>.</span>  <span class=n>If</span> <span class=n>the</span> <span class=n>archive</span> <span class=n>does</span> <span class=ow>not</span> <span class=n>exist</span> <span class=n>a</span> <span class=n>new</span> <span class=n>archive</span> <span class=nb>file</span> <span class=ow>is</span> <span class=n>created</span><span class=o>.</span>  <span class=n>Files</span> <span class=n>that</span> <span class=n>replace</span> <span class=n>existing</span> <span class=n>files</span> <span class=n>do</span> <span class=ow>not</span> <span class=n>change</span> <span class=n>the</span> <span class=n>order</span> <span class=n>of</span> <span class=n>the</span> <span class=n>files</span> <span class=n>within</span> <span class=n>the</span> <span class=n>archive</span><span class=o>.</span>  <span class=n>New</span> <span class=n>files</span> <span class=n>are</span> <span class=n>appended</span> <span class=n>to</span> <span class=n>the</span> <span class=n>archive</span> <span class=n>unless</span> <span class=n>one</span> <span class=n>of</span> <span class=n>the</span> <span class=n>options</span> <span class=o>-</span><span class=n>a</span><span class=p>,</span> <span class=o>-</span><span class=n>b</span> <span class=ow>or</span> <span class=o>-</span><span class=n>i</span> <span class=ow>is</span> <span class=n>specified</span><span class=o>.</span>
+
+<span class=o>-</span><span class=n>s</span>      <span class=n>Write</span> <span class=n>an</span> <span class=nb>object</span><span class=o>-</span><span class=nb>file</span> <span class=n>index</span> <span class=n>into</span> <span class=n>the</span> <span class=n>archive</span><span class=p>,</span> <span class=ow>or</span> <span class=n>update</span> <span class=n>an</span> <span class=n>existing</span> <span class=n>one</span><span class=p>,</span> <span class=n>even</span> <span class=k>if</span> <span class=n>no</span> <span class=n>other</span> <span class=n>change</span> <span class=ow>is</span> <span class=n>made</span> <span class=n>to</span> <span class=n>the</span> <span class=n>archive</span><span class=o>.</span>  <span class=n>You</span> <span class=n>may</span> <span class=n>use</span> <span class=n>this</span> <span class=n>modifier</span> <span class=n>flag</span> <span class=n>either</span> <span class=k>with</span> <span class=nb>any</span> <span class=n>operation</span><span class=p>,</span> <span class=ow>or</span> <span class=n>alone</span><span class=o>.</span>  <span class=n>Running</span> <span class=sb>`ar s&#39; on an archive is equivalent to running `</span><span class=n>ranlib</span><span class=s1>&#39; on it.</span>
+</code></pre></td></tr></table></div></div></blockquote><h2 id=span-idcommand-so-command-so><span id=command-so>command: so</h2><p><strong>g++ &ndash;help</strong></p><blockquote><p>-shared Create a shared library.
+-Wl,<options> Pass comma-separated <options>on to the linker.</p></blockquote><p><code>-Wl,-soname=$soname</code>可参考<a href="https://blog.csdn.net/J_H_C/article/details/98375371?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task">Linux下动态链接库文件的realname、soname和linkname</a>。</p><p><code>-Wl,--whole-archive</code>/<code>--no-whole-archive</code>可参考<a href=https://www.cnblogs.com/JimmyTY/p/5856217.html>Linux C/C++ 链接选项之静态库&ndash;whole-archive,&ndash;no-whole-archive和&ndash;start-group, &ndash;end-group</a>。</p><p><strong>gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=p>{{</span><span class=n>solibs</span><span class=p>}}</span>
+        <span class=n>Extra</span> <span class=n>libraries</span> <span class=kn>from</span> <span class=nn>shared</span> <span class=nn>library</span> <span class=nn>dependencies</span> <span class=nn>not</span> <span class=nn>specified</span> <span class=nn>in</span> <span class=nn>the</span>
+        <span class=p>{{</span><span class=n>inputs</span><span class=p>}}</span><span class=o>.</span> <span class=n>This</span> <span class=ow>is</span> <span class=n>the</span> <span class=nb>list</span> <span class=n>of</span> <span class=n>link_output</span> <span class=n>files</span> <span class=kn>from</span> <span class=nn>shared</span> <span class=nn>libraries</span>
+        <span class=p>(</span><span class=k>if</span> <span class=n>the</span> <span class=n>solink</span> <span class=n>tool</span> <span class=n>specifies</span> <span class=n>a</span> <span class=s2>&#34;link_output&#34;</span> <span class=n>variable</span> <span class=n>separate</span> <span class=kn>from</span>
+        <span class=nn>the</span> <span class=s2>&#34;depend_output&#34;</span><span class=p>)</span><span class=o>.</span>
+
+        <span class=n>These</span> <span class=n>should</span> <span class=n>generally</span> <span class=n>be</span> <span class=n>treated</span> <span class=n>the</span> <span class=n>same</span> <span class=k>as</span> <span class=n>libs</span> <span class=n>by</span> <span class=n>your</span> <span class=n>tool</span><span class=o>.</span>
+
+        <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;libfoo.so libbar.so&#34;</span>
+
+    <span class=p>{{</span><span class=n>libs</span><span class=p>}}</span>
+        <span class=n>Expands</span> <span class=n>to</span> <span class=n>the</span> <span class=nb>list</span> <span class=n>of</span> <span class=n>system</span> <span class=n>libraries</span> <span class=n>to</span> <span class=n>link</span> <span class=n>to</span><span class=o>.</span> <span class=n>Each</span> <span class=n>will</span> <span class=n>be</span>
+        <span class=n>prefixed</span> <span class=n>by</span> <span class=n>the</span> <span class=s2>&#34;lib_switch&#34;</span><span class=o>.</span>
+
+        <span class=n>As</span> <span class=n>a</span> <span class=n>special</span> <span class=n>case</span> <span class=n>to</span> <span class=n>support</span> <span class=n>Mac</span><span class=p>,</span> <span class=n>libraries</span> <span class=k>with</span> <span class=n>names</span> <span class=n>ending</span> <span class=ow>in</span>
+        <span class=s2>&#34;.framework&#34;</span> <span class=n>will</span> <span class=n>be</span> <span class=n>added</span> <span class=n>to</span> <span class=n>the</span> <span class=p>{{</span><span class=n>libs</span><span class=p>}}</span> <span class=k>with</span> <span class=s2>&#34;-framework&#34;</span> <span class=n>preceding</span>
+        <span class=n>it</span><span class=p>,</span> <span class=ow>and</span> <span class=n>the</span> <span class=n>lib</span> <span class=n>prefix</span> <span class=n>will</span> <span class=n>be</span> <span class=n>ignored</span><span class=o>.</span>
+
+        <span class=n>Example</span><span class=p>:</span> <span class=s2>&#34;-lfoo -lbar&#34;</span>
+</code></pre></td></tr></table></div></div></blockquote><h2 id=link-depend>link depend</h2><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>    <span class=n>link_output</span>  <span class=p>[</span><span class=n>string</span> <span class=k>with</span> <span class=n>substitutions</span><span class=p>]</span>
+    <span class=n>depend_output</span>  <span class=p>[</span><span class=n>string</span> <span class=k>with</span> <span class=n>substitutions</span><span class=p>]</span>
+        <span class=n>Valid</span> <span class=k>for</span><span class=p>:</span> <span class=s2>&#34;solink&#34;</span> <span class=n>only</span> <span class=p>(</span><span class=n>optional</span><span class=p>)</span>
+
+        <span class=n>These</span> <span class=n>two</span> <span class=n>files</span> <span class=n>specify</span> <span class=n>which</span> <span class=n>of</span> <span class=n>the</span> <span class=n>outputs</span> <span class=kn>from</span> <span class=nn>the</span> <span class=nn>solink</span> <span class=nn>tool</span>
+        <span class=n>should</span> <span class=n>be</span> <span class=n>used</span> <span class=k>for</span> <span class=n>linking</span> <span class=ow>and</span> <span class=n>dependency</span> <span class=n>tracking</span><span class=o>.</span> <span class=n>These</span> <span class=n>should</span> <span class=n>match</span>
+        <span class=n>entries</span> <span class=ow>in</span> <span class=n>the</span> <span class=s2>&#34;outputs&#34;</span><span class=o>.</span> <span class=n>If</span> <span class=n>unspecified</span><span class=p>,</span> <span class=n>the</span> <span class=n>first</span> <span class=n>item</span> <span class=ow>in</span> <span class=n>the</span>
+        <span class=s2>&#34;outputs&#34;</span> <span class=n>array</span> <span class=n>will</span> <span class=n>be</span> <span class=n>used</span> <span class=k>for</span> <span class=nb>all</span><span class=o>.</span> <span class=n>See</span> <span class=s2>&#34;Separate linking and</span>
+        <span class=n>dependencies</span> <span class=k>for</span> <span class=n>shared</span> <span class=n>libraries</span><span class=s2>&#34; below for more.</span>
+
+        <span class=n>On</span> <span class=n>Windows</span><span class=p>,</span> <span class=n>where</span> <span class=n>the</span> <span class=n>tools</span> <span class=n>produce</span> <span class=n>a</span> <span class=o>.</span><span class=n>dll</span> <span class=n>shared</span> <span class=n>library</span> <span class=ow>and</span> <span class=n>a</span> <span class=o>.</span><span class=n>lib</span>
+        <span class=kn>import</span> <span class=nn>library</span><span class=o>,</span> <span class=nn>you</span> <span class=nn>will</span> <span class=nn>want</span> <span class=nn>the</span> <span class=nn>first</span> <span class=nn>two</span> <span class=nn>to</span> <span class=nn>be</span> <span class=nn>the</span> <span class=nn>import</span> <span class=nn>library</span>
+        <span class=ow>and</span> <span class=n>the</span> <span class=n>third</span> <span class=n>one</span> <span class=n>to</span> <span class=n>be</span> <span class=n>the</span> <span class=o>.</span><span class=n>dll</span> <span class=nb>file</span><span class=o>.</span> <span class=n>On</span> <span class=n>Linux</span><span class=p>,</span> <span class=k>if</span> <span class=n>you</span><span class=s1>&#39;re not doing</span>
+        <span class=n>the</span> <span class=n>separate</span> <span class=n>linking</span><span class=o>/</span><span class=n>dependency</span> <span class=n>optimization</span><span class=p>,</span> <span class=nb>all</span> <span class=n>of</span> <span class=n>these</span> <span class=n>should</span> <span class=n>be</span>
+        <span class=n>the</span> <span class=o>.</span><span class=n>so</span> <span class=n>output</span><span class=o>.</span>
+</code></pre></td></tr></table></div></div></blockquote><h2 id=heading>@/$/${}/{{}}</h2><p><strong><code>@</code> gn reference</strong></p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python>   <span class=o>-</span> <span class=n>Response</span> <span class=nb>file</span><span class=p>:</span> <span class=n>If</span> <span class=n>the</span> <span class=nb>input</span> <span class=n>starts</span> <span class=k>with</span> <span class=n>an</span> <span class=s2>&#34;@&#34;</span><span class=p>,</span> <span class=n>it</span> <span class=n>will</span> <span class=n>be</span> <span class=n>interpreted</span> <span class=k>as</span>
+     <span class=n>a</span> <span class=n>path</span> <span class=n>to</span> <span class=n>a</span> <span class=nb>file</span> <span class=n>containing</span> <span class=n>a</span> <span class=nb>list</span> <span class=n>of</span> <span class=n>labels</span> <span class=ow>or</span> <span class=nb>file</span> <span class=n>names</span><span class=p>,</span> <span class=n>one</span> <span class=n>per</span> <span class=n>line</span><span class=o>.</span>
+     <span class=n>This</span> <span class=n>allows</span> <span class=n>us</span> <span class=n>to</span> <span class=n>handle</span> <span class=nb>long</span> <span class=n>lists</span> <span class=n>of</span> <span class=n>inputs</span> <span class=n>without</span> <span class=n>worrying</span> <span class=n>about</span>
+     <span class=n>command</span> <span class=n>line</span> <span class=n>limits</span><span class=o>.</span>
+</code></pre></td></tr></table></div></div></blockquote><p><strong><code>$</code>/<code>${}</code> <a href=https://gn.googlesource.com/gn/+/master/docs/language.md#Strings>gn language: Strings</a></strong></p><p><code>{{}}</code>猜测为表达式展开。</p><h1 id=启用toolchain>启用toolchain</h1><p>在<code>build/BUILDCONFIG.gn</code>中配置：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=n>set_default_toolchain</span><span class=p>(</span><span class=s2>&#34;//build/toolchain:gcc&#34;</span><span class=p>)</span>
+</code></pre></td></tr></table></div></div><h1 id=参考>参考</h1><p>[1] <strong>toolchain</strong>: Defines a toolchain.</p><p><a href=https://gn.googlesource.com/gn/+/master/docs/reference.md#func_toolchain>https://gn.googlesource.com/gn/+/master/docs/reference.md#func_toolchain</a></p><p>[2] OpenArkCompiler</p><p><a href=https://gitee.com/harmonyos/OpenArkCompiler>https://gitee.com/harmonyos/OpenArkCompiler</a></p></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>孤梦</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2020-03-22</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/ci/>ci</a>
+<a href=/tags/build/>build</a>
+<a href=/tags/gn/>gn</a></div><nav class=post-nav><a class=next href=/post/pgl_cc++/coding_guide/ark_coding/02-%E7%A9%BA%E8%A1%8C/><span class="next-text nav-default">方舟编译器C++语言编程规范增强:空行</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:your@email.com class="iconfont icon-email" title=email></a><a href=http://localhost:1313 class="iconfont icon-stack-overflow" title=stack-overflow></a><a href=http://localhost:1313 class="iconfont icon-twitter" title=twitter></a><a href=http://localhost:1313 class="iconfont icon-facebook" title=facebook></a><a href=http://localhost:1313 class="iconfont icon-linkedin" title=linkedin></a><a href=http://localhost:1313 class="iconfont icon-google" title=google></a><a href=http://localhost:1313 class="iconfont icon-github" title=github></a><a href=http://localhost:1313 class="iconfont icon-weibo" title=weibo></a><a href=http://localhost:1313 class="iconfont icon-zhihu" title=zhihu></a><a href=http://localhost:1313 class="iconfont icon-douban" title=douban></a><a href=http://localhost:1313 class="iconfont icon-pocket" title=pocket></a><a href=http://localhost:1313 class="iconfont icon-tumblr" title=tumblr></a><a href=http://localhost:1313 class="iconfont icon-instagram" title=instagram></a><a href=http://localhost:1313 class="iconfont icon-gitlab" title=gitlab></a><a href=http://localhost:1313 class="iconfont icon-bilibili" title=bilibili></a><a href=http://localhost:1313/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2012 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>孤梦</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script></body></html>
