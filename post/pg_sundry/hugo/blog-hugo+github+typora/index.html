@@ -22,15 +22,15 @@
 </span><span class=lnt>20
 </span><span class=lnt>21
 </span><span class=lnt>22
-</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-js data-lang=js><span class=c>&lt;!--</span> <span class=nx>post</span><span class=o>-</span><span class=nx>header</span> <span class=o>--&gt;</span>    
-<span class=o>&lt;</span><span class=nx>header</span> <span class=kr>class</span><span class=o>=</span><span class=s2>&#34;post-header&#34;</span><span class=o>&gt;</span>
-  <span class=p>...</span>
-  <span class=c>&lt;!--</span> <span class=nx>KaTeX</span> <span class=nx>begin</span> <span class=o>--&gt;</span>
-  <span class=o>&lt;</span><span class=nx>link</span> <span class=nx>rel</span><span class=o>=</span><span class=s2>&#34;stylesheet&#34;</span> <span class=nx>href</span><span class=o>=</span><span class=s2>&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css&#34;</span><span class=o>&gt;</span>
-  <span class=o>&lt;</span><span class=nx>script</span> <span class=nx>src</span><span class=o>=</span><span class=s2>&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js&#34;</span><span class=o>&gt;&lt;</span><span class=err>/script&gt;</span>
-  <span class=o>&lt;</span><span class=nx>script</span> <span class=nx>src</span><span class=o>=</span><span class=s2>&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js&#34;</span><span class=o>&gt;&lt;</span><span class=err>/script&gt;</span>
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-html data-lang=html><span class=c>&lt;!-- post-header --&gt;</span>    
+<span class=p>&lt;</span><span class=nt>header</span> <span class=na>class</span><span class=o>=</span><span class=s>&#34;post-header&#34;</span><span class=p>&gt;</span>
+  ...
+  <span class=c>&lt;!-- KaTeX begin --&gt;</span>
+  <span class=p>&lt;</span><span class=nt>link</span> <span class=na>rel</span><span class=o>=</span><span class=s>&#34;stylesheet&#34;</span> <span class=na>href</span><span class=o>=</span><span class=s>&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css&#34;</span><span class=p>&gt;</span>
+  <span class=p>&lt;</span><span class=nt>script</span> <span class=na>src</span><span class=o>=</span><span class=s>&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+  <span class=p>&lt;</span><span class=nt>script</span> <span class=na>src</span><span class=o>=</span><span class=s>&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js&#34;</span><span class=p>&gt;&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
 
-  <span class=o>&lt;</span><span class=nx>script</span><span class=o>&gt;</span>
+  <span class=p>&lt;</span><span class=nt>script</span><span class=p>&gt;</span>
     <span class=nb>document</span><span class=p>.</span><span class=nx>addEventListener</span><span class=p>(</span><span class=s2>&#34;DOMContentLoaded&#34;</span><span class=p>,</span> <span class=kd>function</span><span class=p>()</span> <span class=p>{</span>
       <span class=nx>renderMathInElement</span><span class=p>(</span><span class=nb>document</span><span class=p>.</span><span class=nx>body</span><span class=p>,</span> <span class=p>{</span>
               <span class=nx>delimiters</span><span class=o>:</span> <span class=p>[</span>
@@ -41,9 +41,9 @@
               <span class=p>]</span>
           <span class=p>});</span>
     <span class=p>});</span>
-  <span class=o>&lt;</span><span class=err>/script&gt;</span>
-  <span class=c>&lt;!--</span> <span class=nx>KaTeX</span> <span class=nx>end</span> <span class=o>--&gt;</span>
-<span class=o>&lt;</span><span class=err>/header&gt;</span>
+  <span class=p>&lt;/</span><span class=nt>script</span><span class=p>&gt;</span>
+  <span class=c>&lt;!-- KaTeX end --&gt;</span>
+<span class=p>&lt;/</span><span class=nt>header</span><span class=p>&gt;</span>
 </code></pre></td></tr></table></div></div><h2 id=问题5>问题5</h2><ul><li>问题描述：KaTex使用<code>$</code>标记的表达式按照块显示，而非inline</li><li>解决方案：</li></ul><p>参考https://katex.org/docs/autorender.html#api的描述，使用相同的配置成功将<code>$</code>标记的表达式inline。</p><blockquote><p>If you want to add support for inline math via <code>$...$</code>, be sure to list it <em>after</em> <code>$$</code>, as in the following. (Because rules are processed in order, putting a <code>$</code> rule first would catch <code>$$</code> as an empty math expression.)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
