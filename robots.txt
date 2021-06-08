@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://www.guyuemeng.com/sitemap.xml
+Sitemap: https://blog.guyuemeng.com/sitemap.xml
