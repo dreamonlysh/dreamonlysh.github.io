@@ -1,0 +1,342 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>方舟编译器C++语言编程规范增强:空行 - gumeng's blog.</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="孤梦"><meta name=description content="文章通过段落将内容变得更具节奏，代码通过换行来达到相同的效果。换行对于代码阅读来说非常重要，过多的空行会减少屏幕显示的有效代码；过少的空行又"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.83.1 with theme even"><link rel=canonical href=https://www.guyuemeng.com/post/pgl_cc++/coding_guide/ark_coding/02-%E7%A9%BA%E8%A1%8C/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="方舟编译器C++语言编程规范增强:空行"><meta property="og:description" content="文章通过段落将内容变得更具节奏，代码通过换行来达到相同的效果。换行对于代码阅读来说非常重要，过多的空行会减少屏幕显示的有效代码；过少的空行又"><meta property="og:type" content="article"><meta property="og:url" content="https://www.guyuemeng.com/post/pgl_cc++/coding_guide/ark_coding/02-%E7%A9%BA%E8%A1%8C/"><meta property="article:section" content="post"><meta property="article:published_time" content="2020-02-07T16:32:26+08:00"><meta property="article:modified_time" content="2020-02-07T16:32:26+08:00"><meta itemprop=name content="方舟编译器C++语言编程规范增强:空行"><meta itemprop=description content="文章通过段落将内容变得更具节奏，代码通过换行来达到相同的效果。换行对于代码阅读来说非常重要，过多的空行会减少屏幕显示的有效代码；过少的空行又"><meta itemprop=datePublished content="2020-02-07T16:32:26+08:00"><meta itemprop=dateModified content="2020-02-07T16:32:26+08:00"><meta itemprop=wordCount content="3262"><meta itemprop=keywords content="ark,coding-guide,c/c++,"><meta name=twitter:card content="summary"><meta name=twitter:title content="方舟编译器C++语言编程规范增强:空行"><meta name=twitter:description content="文章通过段落将内容变得更具节奏，代码通过换行来达到相同的效果。换行对于代码阅读来说非常重要，过多的空行会减少屏幕显示的有效代码；过少的空行又"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>孤梦</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>孤梦</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>方舟编译器C++语言编程规范增强:空行</h1><div class=post-meta><span class=post-time>2020-02-07</span><div class=post-category><a href=/categories/ark/>ark</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><a href=#基础规则>基础规则</a><ul><li><a href=#完全禁止使用连续空行>完全禁止使用连续空行</a></li></ul></li><li><a href=#文件域布局>文件域布局</a><ul><li><a href=#文件头尾>文件头尾</a></li><li><a href=#注释>注释</a></li><li><a href=#头文件引用代码域>头文件引用代码域</a></li><li><a href=#命名空间代码域>命名空间代码域</a></li><li><a href=#类型代码域>类型代码域</a></li><li><a href=#常量代码域>常量代码域</a></li><li><a href=#其他>其他</a></li></ul></li><li><a href=#类域布局>类域布局</a><ul><li><a href=#enumenum-classunionstruct><code>enum</code>/<code>enum class</code>/<code>union</code>/<code>struct</code></a></li><li><a href=#class><code>class</code></a></li></ul></li><li><a href=#函数域布局>函数域布局</a></li></ul></nav></div></div><div class=post-content><p>文章通过段落将内容变得更具节奏，代码通过换行来达到相同的效果。换行对于代码阅读来说非常重要，过多的空行会减少屏幕显示的有效代码；过少的空行又易使代码上下黏连，造成“文不加点”的阅读困惑；不恰当的换行有可能使语义割裂，从而形成阅读障碍，甚至具有误导性。</p><p><em>格式类规范总体要求：凸显相关内容的关联性，隔离不同分组，使代码简洁而又层次分明。</em></p><p><em>如果任何的编码规范违背了上述要求，均应避免削足适履，当跳出规范外进行设计，将好的设计作为特例场景固化。</em></p><h1 id=基础规则>基础规则</h1><h2 id=完全禁止使用连续空行>完全禁止使用连续空行</h2><p>若存在希望通过两个连续空行来带代码进行分块的场景，使用单空行+注释的方式进行分割。</p><h1 id=文件域布局>文件域布局</h1><p>文件层级经常会包含以下元素：文件头注释(包含版权声明)、<code>#include</code>、<code>namespace</code>、常量、<code>enum</code>/<code>union</code>/<code>struct</code>/<code>class</code>、全局函数。其他还有：全局变量、宏、<code>extern</code>声明、<code>using namespace</code>、<code>using</code>/<code>typedef</code>。约定整体布局如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/*
+</span><span class=cm> * Document for the file head.
+</span><span class=cm> */</span>
+<span class=cp>#include</span> <span class=cpf>&lt;string&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=k>namespace</span> <span class=n>maple</span> <span class=p>{</span>
+
+<span class=k>constexpr</span> <span class=kt>int32_t</span> <span class=n>kConstInt</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+
+<span class=k>enum</span> <span class=nc>Enum</span> <span class=p>{};</span>
+
+<span class=k>union</span> <span class=nc>Union</span> <span class=p>{};</span>
+
+<span class=k>struct</span> <span class=nc>Struct</span> <span class=p>{};</span>
+  
+<span class=k>class</span> <span class=nc>Class</span> <span class=p>{};</span>
+
+<span class=kt>void</span> <span class=nf>GlobalFunction</span><span class=p>()</span> <span class=p>{}</span>
+<span class=p>}</span> <span class=c1>// maple
+</span></code></pre></td></tr></table></div></div><h2 id=文件头尾>文件头尾</h2><ol><li><p>文件起始必须为有效的代码或注释，不可为空行。</p></li><li><p>文件结束必须有且仅有一个空行。</p><p>文件必须以空行结束有其历史原因，主要原因为<a href=https://stackoverflow.com/questions/72271/no-newline-at-end-of-file-compiler-warning><code>C</code>标准</a>和<a href=https://stackoverflow.com/questions/729692/why-should-text-files-end-with-a-newline>行的定义</a>。</p></li></ol><h2 id=注释>注释</h2><p>上置注释与其注释内容间不应有空行。</p><p>更有严者，除右置注释外，其他注释均不应与下方代码之间有空行，即换种说法，不应存在无对应代码的注释。</p><p>特殊场景解释：文件头注释并非注释头文件保护<code>#define</code>，或头文件引用<code>#include</code>，但无空行对可读性无负面影响，且使代码更加紧凑，所以约定头文件注释与以上两者之间无空行。若源文件中头文件注释紧跟的为<code>namespace</code>或其他代码，则文件头注释需要与下文保持一个空行，为未来可能添加<code>#include</code>预留空间。</p><h2 id=头文件引用代码域>头文件引用代码域</h2><p>头文件引用<code>#include</code>代码域与其上内容不留空行，但与其下的<code>namespace</code>或其他代码片段之间有空行。</p><p>通常来说<code>#include</code>之间不应有空行，但若基于以下几个原因之一，或其他充分的解释，可以适当添加空行：</p><ol><li><p>包含大量头文件(半屏乃至一屏)，难以管理</p></li><li><p>头文件分组更易做扩展(如<code>phase_manager</code>中对<code>phase</code>的头文件按类别分组)</p></li><li><p>《<strong>方舟编译器C++语言编程规范</strong>》中例外的场景</p><blockquote><p>例外： 平台特定代码需要条件编译，这些代码可以放到其它 includes 之后。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cp>#include</span> <span class=cpf>&#34;foo/public/FooServer.h&#34;</span><span class=cp>
+</span><span class=cp></span>
+<span class=cp>#include</span> <span class=cpf>&#34;base/Port.h&#34;  // For LANG_CXX11.</span><span class=cp>
+</span><span class=cp></span>
+<span class=cp>#ifdef LANG_CXX11
+</span><span class=cp>#include</span> <span class=cpf>&lt;initializer_list&gt;</span><span class=cp>
+</span><span class=cp>#endif  </span><span class=c1>// LANG_CXX11
+</span></code></pre></td></tr></table></div></div></blockquote></li></ol><p>下面以一个<code>C++</code>的分类方式进行分组示例(Test.cpp)：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cp>#include</span> <span class=cpf>&#34;Test.h&#34;</span><span class=cp>
+</span><span class=cp></span>
+<span class=cp>#include</span> <span class=cpf>&lt;string&gt;</span><span class=cp>
+</span><span class=cp></span><span class=c1>// So many from STL
+</span><span class=c1></span><span class=cp>#include</span> <span class=cpf>&lt;vector&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=cp>#include</span> <span class=cpf>&#34;utils/utils.h&#34;</span><span class=cp>
+</span><span class=cp></span><span class=c1>// So many from `-I` by the system configuration
+</span><span class=c1></span><span class=cp>#include</span> <span class=cpf>&#34;utils/meta.h&#34;</span><span class=cp>
+</span><span class=cp></span>
+<span class=cp>#include</span> <span class=cpf>&#34;abc.h&#34;</span><span class=cp>
+</span><span class=cp></span><span class=c1>// So many by relative search
+</span><span class=c1></span><span class=cp>#include</span> <span class=cpf>&#34;sub_folder/xyz.h&#34;</span><span class=cp>
+</span></code></pre></td></tr></table></div></div><h2 id=命名空间代码域>命名空间代码域</h2><p>命名空间代码域与其上内容之间有空行(在文件起始例外)，但与其下的代码片段之间有空行。</p><blockquote><p>《<strong>方舟编译器C++语言编程规范</strong>》</p><ul><li>大括号内的代码块行首之前和行尾之后不要加空行。</li></ul><p>*”与其下的代码片段之间有空行”*违背了开源规范中的此原则，但此开源规范应当有一条先决条件，即<strong>当大括号内代码块缩进级别多于大括号的代码块时</strong>。所以如下代码，依然需要空行，避免干扰下方代码块的阅读。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>namespace</span> <span class=n>maple</span> <span class=p>{</span>
+
+<span class=k>template</span> <span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+<span class=kt>void</span> <span class=n>Func</span><span class=p>(</span><span class=n>T</span> <span class=o>&amp;</span><span class=p>)</span> <span class=p>{</span>
+
+<span class=p>}</span>
+<span class=p>}</span> <span class=c1>// maple
+</span></code></pre></td></tr></table></div></div></blockquote><p>命名空间代码域包含以下几类内容：</p><ol><li>声明命名空间<code>namespace</code></li><li>引用命名空间<code>using namespace</code></li><li>引用类型<code>using Type</code></li></ol><p>这几类内容中间均无空行，如下所示。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>namespace</span> <span class=n>maple</span> <span class=p>{</span>
+<span class=k>namespace</span> <span class=n>utils</span> <span class=p>{</span>
+<span class=k>using</span> <span class=k>namespace</span> <span class=n>A</span><span class=o>::</span><span class=n>B</span><span class=o>::</span><span class=n>C</span><span class=p>;</span>
+<span class=k>using</span> <span class=k>namespace</span> <span class=n>A1</span><span class=o>::</span><span class=n>B1</span><span class=p>;</span>
+<span class=k>using</span> <span class=n>A2</span><span class=o>::</span><span class=n>B2</span><span class=o>::</span><span class=n>B2Object</span><span class=p>;</span>
+
+<span class=c1>// Code Body
+</span><span class=c1></span><span class=p>}</span> <span class=c1>// utils
+</span><span class=c1></span><span class=p>}</span> <span class=c1>// maple
+</span></code></pre></td></tr></table></div></div><p>命名空间的右括号由于需要添加空间结束的右置注释，所以其与上方代码块之间的空行多数场景可以考虑省略。即</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>namespace</span> <span class=n>maple</span> <span class=p>{</span>
+<span class=k>namespace</span> <span class=n>utils</span> <span class=p>{</span>
+
+<span class=c1>// Code Body
+</span><span class=c1></span><span class=p>}</span> <span class=c1>// utils
+</span><span class=c1></span><span class=p>}</span> <span class=c1>// maple
+</span></code></pre></td></tr></table></div></div><p>或</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>namespace</span> <span class=n>maple</span> <span class=p>{</span> <span class=k>namespace</span> <span class=n>utils</span> <span class=p>{</span>
+
+<span class=c1>// Code Body
+</span><span class=c1></span><span class=p>}}</span> <span class=c1>// maple::utils
+</span></code></pre></td></tr></table></div></div><h2 id=类型代码域>类型代码域</h2><p>类型代码域包含了<code>enum</code>/<code>enum class</code>/<code>union</code>/<code>struct</code>/<code>class</code>/<code>GlobalFunction</code>(全局函数可看作类型，乃是从仿函数的角度来看，包括其使用大驼峰命名)。其各自形成块，并以<code>}</code>或<code>};</code>作为终结符。</p><p>基础规则：类型代码域中每个类型之间必须留空行，与其他代码域之间必须留空行。由于每个类型均包含相当多的信息，一般不会在一个行块内定义完全，这些类型自身已形成一个分组，所以他们之间必须留空行。</p><p>例外场景如下：</p><ol><li><p>类型与命名空间的结束符(<code>}</code>)之间的空行，在不影响阅读的情况下，往往可以移除。</p></li><li><p><code>constexpr</code>/<code>const</code>常量、<code>using</code>/<code>typedef</code>与类型有强关联，可以形成大的分组时，可看作一个整体，其内部的空行多数可以省略。示例如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kScopeLocal</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>   <span class=c1>// the default scope level for function variables
+</span><span class=c1></span><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kScopeGlobal</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>  <span class=c1>// the scope level for global variables
+</span><span class=c1></span>
+<span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kSymKindCount</span> <span class=o>=</span> <span class=mi>7</span><span class=p>;</span>
+<span class=k>enum</span> <span class=nc>MIRSymKind</span> <span class=p>{</span>
+  <span class=n>kStInvalid</span><span class=p>,</span>
+  <span class=n>kStVar</span><span class=p>,</span>
+  <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=k>using</span> <span class=n>HolderType</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int32_t</span><span class=o>&gt;</span><span class=p>;</span>
+<span class=kt>void</span> <span class=nf>Func</span><span class=p>(</span><span class=k>const</span> <span class=n>HolderType</span> <span class=o>&amp;</span><span class=n>data</span><span class=p>)</span> <span class=p>{</span>
+  <span class=k>for</span> <span class=p>(</span><span class=kt>int32_t</span> <span class=nl>elem</span> <span class=p>:</span> <span class=n>data</span><span class=p>)</span> <span class=p>{}</span>
+<span class=p>}</span>
+
+<span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kNumberLimit</span> <span class=o>=</span> <span class=mi>32</span><span class=p>;</span>
+<span class=c1>// Document for `Num`
+</span><span class=c1></span><span class=k>class</span> <span class=nc>Number</span> <span class=p>{</span>
+ <span class=k>public</span><span class=o>:</span>
+<span class=p>};</span>
+</code></pre></td></tr></table></div></div></li></ol><h2 id=常量代码域>常量代码域</h2><p>常量代码域包含了<code>constexpr</code>/<code>const</code>定义的常量，以及<code>enum</code>/<code>enum class</code>定义的枚举常量，枚举常量随类型代码域中的规约。<code>constexpr</code>/<code>const</code>定义的常量从是否需要进行显示分组的角度，可以分为以下两种场景进行参考(分模块、分组也是设计中重要的一份内容，尤其是在本文中，会经常提及)。</p><ol><li><p>无显示分组</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kScopeLocal</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>   <span class=c1>// the default scope level for function variables
+</span><span class=c1></span><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kScopeGlobal</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>  <span class=c1>// the scope level for global variables
+</span><span class=c1></span><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kSymKindCount</span> <span class=o>=</span> <span class=mi>7</span><span class=p>;</span>
+</code></pre></td></tr></table></div></div></li><li><p>按业务显示分组</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// Consts of Scope.
+</span><span class=c1></span><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kScopeLocal</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>   <span class=c1>// the default scope level for function variables
+</span><span class=c1></span><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kScopeGlobal</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>  <span class=c1>// the scope level for global variables
+</span><span class=c1></span>
+<span class=c1>// Consts of SymolKind
+</span><span class=c1></span><span class=k>constexpr</span> <span class=kt>int</span> <span class=n>kSymKindCount</span> <span class=o>=</span> <span class=mi>7</span><span class=p>;</span>
+</code></pre></td></tr></table></div></div></li></ol><p>常量代码域与其他代码域之间需要保留一个空行。</p><h2 id=其他>其他</h2><ol><li><p>函数宏的规则同函数，常量宏的规则同常量</p></li><li><p>集中的<code>extern</code>声明往往命名空间代码域下，规则同常量</p></li><li><p><code>using</code>/<code>typedef</code>通常不会有集中声明，若存在，规则同常量</p></li><li><p>全局变量上下必须有空行，并有详细的注释来解释必须使用全局变量的原因</p></li></ol><h1 id=类域布局>类域布局</h1><h2 id=enumenum-classunionstruct><code>enum</code>/<code>enum class</code>/<code>union</code>/<code>struct</code></h2><p>在<code>C++</code>中，这几种关键字创建的为数据对象，而<code>class</code>创建的通常是算法对象或业务对象。这也是为什么当<code>class</code>定义的类型中出现大量<code>Get</code>/<code>Set</code>成员变量时，会看起来比较新手，<code>C++</code>有自己的数据对象，而且对象设计应尽量遵循**Tell, Don&rsquo;t ask"原则，题外话了。</p><p>这里以<code>struct</code>作为示例，<code>struct</code>包含成员函数的场景同<code>class</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>struct</span> <span class=nc>XX</span> <span class=p>{</span>
+  <span class=kt>char</span> <span class=n>a</span><span class=p>;</span>     
+  <span class=kt>char</span> <span class=n>b</span><span class=p>;</span>     
+  <span class=kt>char</span> <span class=n>c</span><span class=p>;</span>
+<span class=p>};</span>
+</code></pre></td></tr></table></div></div><ol><li>成员变量与结构体定义的<code>{</code>、<code>}</code>之间均无空行</li><li>成员变量之间无空行。若要对成员变量进行分组，可以使用注释。</li></ol><h2 id=class><code>class</code></h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>class</span> <span class=nc>Class</span> <span class=p>{</span>
+ <span class=k>public</span><span class=o>:</span>
+  <span class=n>Class</span><span class=p>()</span> <span class=o>=</span> <span class=k>default</span><span class=p>;</span>
+  <span class=o>~</span><span class=n>Class</span><span class=p>()</span> <span class=o>=</span> <span class=k>default</span><span class=p>;</span>
+
+ <span class=k>protected</span><span class=o>:</span>
+  <span class=kt>void</span> <span class=n>ProtectedFunc</span><span class=p>();</span>
+
+ <span class=k>private</span><span class=o>:</span>
+  <span class=kt>void</span> <span class=n>PrivateFunc</span><span class=p>();</span>
+
+ <span class=k>private</span><span class=o>:</span>
+  <span class=kt>int32_t</span> <span class=n>member</span><span class=p>;</span>
+<span class=p>};</span>
+</code></pre></td></tr></table></div></div><p>在<code>struct</code>规范的基础上，<code>plublic</code>/<code>protected</code>/<code>private</code>可见性关键字上方需要空格，而下方紧接代码，无空格。除成员函数例外，其他如类内的常量、成员变量、<code>using/typedef</code>同<strong>文件域布局::常量代码域</strong>，类内静态成员变量同全局变量。</p><p>成员函数间必须要空行，但也有例外：</p><ol><li>构造函数与析构函数间的空行可以省去，构造函数上方的空行以及析构函数下方的空行不能省。</li><li>对于纯函数声明，若多个函数存在相关性，即可以分组，则他们之间的空行可以省去。</li></ol><h1 id=函数域布局>函数域布局</h1><p>函数域内的空行难以用精确的规则来约束，此处只能尽量描述其思想以及常见插入空行的示例。函数内空行的基本原则是：</p><ol><li>避免为每行代码都追加一个空行，会导致代码过于松散</li><li>避免超过5行或10行且缩进层级少的代码中，一个空行都没有，或导致代码</li><li>避免随性切割代码，用以达到适当换行这样的描述</li></ol><p>代码块之间好的空行应有类似阅读时抑扬顿挫之感。以下是几个常见可以考虑插入换行的场景：</p><ol><li><p>入参校验与业务实现之间</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=kt>void</span> <span class=nf>Func</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>str</span><span class=p>)</span> <span class=p>{</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>str</span> <span class=o>==</span> <span class=k>nullptr</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>return</span><span class=p>;</span>
+  <span class=p>}</span>
+
+  <span class=c1>// Business code
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></td></tr></table></div></div></li><li><p>参数准备与业务实现之间</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=kt>void</span> <span class=nf>Func</span><span class=p>(</span><span class=k>const</span> <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=o>&amp;</span><span class=n>filePath</span><span class=p>)</span> <span class=p>{</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>fileName</span> <span class=o>=</span> <span class=n>filePath</span><span class=p>.</span><span class=n>substr</span><span class=p>();</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>fileType</span> <span class=o>=</span> <span class=n>fileName</span><span class=p>.</span><span class=n>substr</span><span class=p>();</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>dirName</span> <span class=o>=</span> <span class=n>filePath</span><span class=p>.</span><span class=n>substr</span><span class=p>();</span>
+
+  <span class=c1>// Business code
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></td></tr></table></div></div></li><li><p>业务实现与构建返回信息</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int32_t</span><span class=o>&gt;</span> <span class=n>Func</span><span class=p>(</span><span class=k>const</span> <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=o>&amp;</span><span class=n>filePath</span><span class=p>)</span> <span class=p>{</span>
+  <span class=c1>// Business code
+</span><span class=c1></span>
+  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int32_t</span><span class=o>&gt;</span> <span class=n>rst</span><span class=p>;</span>
+  <span class=n>rst</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=mi>0</span><span class=p>);</span>
+  <span class=n>rst</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+  <span class=k>return</span> <span class=n>rst</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div></li><li><p>业务实现与区域资源回收之间</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=kt>void</span> <span class=nf>Func</span><span class=p>(</span><span class=kt>int32_t</span> <span class=n>dataCode1</span><span class=p>,</span> <span class=kt>int32_t</span> <span class=n>dataCode2</span><span class=p>)</span> <span class=p>{</span>
+  <span class=n>LockResource</span><span class=p>(</span><span class=n>dataCode1</span><span class=p>);</span>
+  <span class=n>LockResource</span><span class=p>(</span><span class=n>dataCode2</span><span class=p>);</span>
+
+  <span class=c1>// Business code
+</span><span class=c1></span>
+  <span class=n>UnlockResource</span><span class=p>(</span><span class=n>dataCode1</span><span class=p>);</span>
+  <span class=n>UnlockResource</span><span class=p>(</span><span class=n>dataCode2</span><span class=p>);</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div></li><li><p>平行的业务实现与业务实现之间</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=kt>void</span> <span class=nf>Func</span><span class=p>(</span><span class=kt>char</span> <span class=o>*</span><span class=n>str</span><span class=p>)</span> <span class=p>{</span>
+  <span class=c1>// Check input
+</span><span class=c1></span>  <span class=k>if</span> <span class=p>(</span><span class=n>str</span> <span class=o>==</span> <span class=k>nullptr</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>return</span><span class=p>;</span>
+  <span class=p>}</span>
+
+  <span class=c1>// Check input
+</span><span class=c1></span>  <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>fileName</span> <span class=o>=</span> <span class=n>filePath</span><span class=p>.</span><span class=n>substr</span><span class=p>();</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>fileType</span> <span class=o>=</span> <span class=n>fileName</span><span class=p>.</span><span class=n>substr</span><span class=p>();</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>fileType</span> <span class=o>!=</span> <span class=s>&#34;csv&#34;</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>return</span><span class=p>;</span>
+  <span class=p>}</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>dirName</span> <span class=o>=</span> <span class=n>filePath</span><span class=p>.</span><span class=n>substr</span><span class=p>();</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>dirName</span><span class=p>.</span><span class=n>find</span><span class=p>(</span><span class=s>&#34;..&#34;</span><span class=p>)</span> <span class=o>!=</span> <span class=n>std</span><span class=o>::</span><span class=n>string</span><span class=o>::</span><span class=n>npos</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>return</span><span class=p>;</span>
+  <span class=p>}</span>
+
+  <span class=c1>// Business code
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></td></tr></table></div></div></li></ol><p>函数域内空行添加空行的原则最终的原则：<strong>无论从结构设计抑或是业务概念上，可以进行分组，在不会显得松散的情况下，可以添加空行</strong>。换句话说<strong>想好怎么回复质疑的理由，那便可以换行</strong>。</p></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>孤梦</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2020-02-07</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/ark/>ark</a>
+<a href=/tags/coding-guide/>coding-guide</a>
+<a href=/tags/c/c++/>c/c++</a></div><nav class=post-nav><a class=prev href=/post/pg_ci/build/gn/><i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">GN Overview</span>
+<span class="prev-text nav-mobile">Prev</span></a>
+<a class=next href=/post/pgl_cc++/coding_guide/ark_coding/01-%E6%B3%A8%E9%87%8A/><span class="next-text nav-default">方舟编译器C++语言编程规范增强:注释</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:932394170@qq.com class="iconfont icon-email" title=email></a><a href=https://github.com/dreamonlysh/ class="iconfont icon-github" title=github></a><a href=https://www.guyuemeng.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2012 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>孤梦</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script></body></html>

@@ -1,0 +1,151 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>doxygen注释简规(分组) - gumeng's blog.</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="孤梦"><meta name=description content="概述 基础章节主要介绍了doxygen的基本语法，用于注释类、成员、函数等，由此可以生成含有注释的文档。但在拥有基本注释内容的基础上，面对大量"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.83.1 with theme even"><link rel=canonical href=https://www.guyuemeng.com/post/pg_sundry/doxygen/0-1-doxygen%E6%B3%A8%E9%87%8A%E7%AE%80%E8%A7%84%E5%88%86%E7%BB%84/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="doxygen注释简规(分组)"><meta property="og:description" content="概述 基础章节主要介绍了doxygen的基本语法，用于注释类、成员、函数等，由此可以生成含有注释的文档。但在拥有基本注释内容的基础上，面对大量"><meta property="og:type" content="article"><meta property="og:url" content="https://www.guyuemeng.com/post/pg_sundry/doxygen/0-1-doxygen%E6%B3%A8%E9%87%8A%E7%AE%80%E8%A7%84%E5%88%86%E7%BB%84/"><meta property="article:section" content="post"><meta property="article:published_time" content="2015-04-12T00:18:46+08:00"><meta property="article:modified_time" content="2015-04-12T00:18:46+08:00"><meta itemprop=name content="doxygen注释简规(分组)"><meta itemprop=description content="概述 基础章节主要介绍了doxygen的基本语法，用于注释类、成员、函数等，由此可以生成含有注释的文档。但在拥有基本注释内容的基础上，面对大量"><meta itemprop=datePublished content="2015-04-12T00:18:46+08:00"><meta itemprop=dateModified content="2015-04-12T00:18:46+08:00"><meta itemprop=wordCount content="1842"><meta itemprop=keywords content="doxygen,c/c++,"><meta name=twitter:card content="summary"><meta name=twitter:title content="doxygen注释简规(分组)"><meta name=twitter:description content="概述 基础章节主要介绍了doxygen的基本语法，用于注释类、成员、函数等，由此可以生成含有注释的文档。但在拥有基本注释内容的基础上，面对大量"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>孤梦</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>孤梦</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>doxygen注释简规(分组)</h1><div class=post-meta><span class=post-time>2015-04-12</span><div class=post-category><a href=/categories/tools/>tools</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li><a href=#概述>概述</a></li><li><a href=#模块modules>模块(modules)</a><ul><li><a href=#defgroup>defgroup</a></li><li><a href=#addtogroup>addtogroup</a></li><li><a href=#ingroup>ingroup</a></li><li><a href=#weakgroup>weakgroup</a></li></ul></li><li><a href=#成员分组member-group>成员分组(member group)</a><ul><li><a href=#name>name</a></li><li><a href=#禁止分组为子组>禁止分组为子组</a></li><li><a href=#注意>注意</a></li><li><a href=#规范私用>规范(私用)</a></li></ul></li></ul></li></ul></nav></div></div><div class=post-content><h2 id=概述>概述</h2><blockquote><p>基础章节主要介绍了doxygen的基本语法，用于注释类、成员、函数等，由此可以生成含有注释的文档。但在拥有基本注释内容的基础上，面对大量注释，希望可以合理的分类以及布局，即本文将介绍的doxygen分组方法。</p></blockquote><h2 id=模块modules>模块(modules)</h2><blockquote><p>模块的划分会显示在CHM文件中的目录树上，每个模块将单独作为一页显示。这里将着重介绍@defgroup、@addtogroup、@{&mldr;@}、@ingroup</p></blockquote><h3 id=defgroup>defgroup</h3><blockquote><p>模块定义的唯一方式，可以是纯定义，也可以定义时初始化模块内容：</p></blockquote><ol><li>纯定义</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/**
+</span><span class=cm> * @defgroup [gTag] [gName]
+</span><span class=cm> * This is brief.
+</span><span class=cm> * This is detail.
+</span><span class=cm> */</span>
+</code></pre></td></tr></table></div></div><ol start=2><li>定义+初始化</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/**
+</span><span class=cm> * @defgroup [gTag] [gName]
+</span><span class=cm> * This is brief.
+</span><span class=cm> * This is detail.
+</span><span class=cm> * @{
+</span><span class=cm> */</span>
+<span class=p>...</span>
+<span class=cm>/** @} */</span>
+</code></pre></td></tr></table></div></div><blockquote><ol><li>模块的定义语句包含了三部分CMD+TAG+NAME，如上所示：@defgroup为CMD代表定义一个模块；[gTag]为TAG信息，可理解为索引，其他命令将通过它来定位到本模块；[gName]为NAME信息，真实显示到注释文件中的模块名。</li><li>这里涉及到了@{&mldr;@}，这类似于类和函数等的{&mldr;}，表示其中大括号中包含的内容属于当前模块。</li><li>模块可以嵌套（subgroup）</li></ol></blockquote><h3 id=addtogroup>addtogroup</h3><blockquote><p>如其名，将某段内容添加到模块：</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/**
+</span><span class=cm> * @addtogroup [gTag]
+</span><span class=cm> * This is detail.
+</span><span class=cm> * @{
+</span><span class=cm> */</span>
+<span class=p>...</span>
+<span class=cm>/** @} */</span>
+</code></pre></td></tr></table></div></div><blockquote><p>由以上的格式可见，其与定义+初始化的defgroup比较类似。其中[gTag]为之前定义的group索引，但不用添加模块名；描述信息中仅有detail信息，用以补充group的detail信息。</p></blockquote><h3 id=ingroup>ingroup</h3><blockquote><p>ingroup功能与@{&mldr;@}基本相同，不同点在于ingroup拥有更高的优先级。在defgroup或addtogroup中已进行分组的内容会因为@ingroup命令而重新确定归属。</p></blockquote><ol><li>示例：将某块代码添加到组</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/**
+</span><span class=cm> * @ingroup [gTag]
+</span><span class=cm> * This is brief.
+</span><span class=cm> */</span>
+<span class=k>class</span> <span class=nc>tClass</span> <span class=p>{}</span>
+</code></pre></td></tr></table></div></div><ol start=2><li>示例：将某组添加为子组</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/**
+</span><span class=cm> * @defgroup [gTagSub] [gNameSub]
+</span><span class=cm> * @ingroup [gTag]
+</span><span class=cm> * This is brief.
+</span><span class=cm> */</span>
+</code></pre></td></tr></table></div></div><ol start=3><li>示例：将文件添加到组</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/** @file
+</span><span class=cm> *  @ingroup group3
+</span><span class=cm> *  This is brief.
+</span><span class=cm> */</span>
+</code></pre></td></tr></table></div></div><ol start=4><li>示例：将class/file/namespace添加到多个组</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/**
+</span><span class=cm> * @ingroup group1 group2 group3 group4
+</span><span class=cm> * This is brief.
+</span><span class=cm> */</span>
+</code></pre></td></tr></table></div></div><h3 id=weakgroup>weakgroup</h3><blockquote><p>功能与addtogroup完全相同，不同的是优先级非常低，在有冲突的情形下，将会被惰性加载。该功能可用于在hpp文件中使用高优先级的分组方法、cpp中使用weakgroup低优先级的分组方法，那么cpp就无需完全复制hpp中的分组方式，从而避免冲突。</p></blockquote><h2 id=成员分组member-group>成员分组(member group)</h2><blockquote><p>模块为分页显示，成员分组功能则是一个class或file内部的分组(个人理解为页内分组，其中成员分组又针对class和file级别做了分组显示。)。若未指定成员分组，doxygen将执行默认分组，例如分为宏定义、函数、变量等。以下将重点介绍分组方法@name</p></blockquote><h3 id=name>name</h3><blockquote><p>成员分组也用到@{&mldr;@}，用于将包含的内容指定到组。若未指定@name，该分组在doxygen的默认分组下，但会以空行隔开放置最后。自定义的组名的分组示例如下：</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/** 
+</span><span class=cm> * A class. Details
+</span><span class=cm> */</span>
+<span class=k>class</span> <span class=nc>Test</span>
+<span class=p>{</span>
+<span class=k>public</span><span class=o>:</span>
+    <span class=cm>/**
+</span><span class=cm>     * @{
+</span><span class=cm>     */</span>
+    <span class=kt>void</span> <span class=n>func1InGroup1</span><span class=p>();</span>
+    <span class=cm>/** @} */</span>
+
+    <span class=cm>/**
+</span><span class=cm>     * @name MyGroup
+</span><span class=cm>     * This is brief.
+</span><span class=cm>     * This is detail.
+</span><span class=cm>     * @{
+</span><span class=cm>     */</span>
+    <span class=kt>void</span> <span class=nf>func2InGroup1</span><span class=p>();</span>
+    <span class=cm>/** @} */</span>
+
+    <span class=kt>void</span> <span class=nf>ungroupedFunction</span><span class=p>();</span>
+<span class=p>};</span>
+</code></pre></td></tr></table></div></div><blockquote><p>如上，在doxygen的class Test页内，我们将期望看到MyGroup分组。然而可以发现该分组为Public Member Functions分组的一个子组。</p></blockquote><h3 id=禁止分组为子组>禁止分组为子组</h3><blockquote><p>class或file添加@nosubgrouping命令</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=cm>/** 
+</span><span class=cm> * @nosubgrouping
+</span><span class=cm> * A class. Details
+</span><span class=cm> */</span>
+<span class=k>class</span> <span class=nc>Test</span>
+<span class=p>{</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><blockquote><p>添加该命令后doxygen默认分组下将再无子组，未命名的分组将失效，已命名的分组将变为与默认分组平级的组。</p></blockquote><h3 id=注意>注意</h3><blockquote><p>参考<a href=http://www.stack.nl/~dimitri/doxygen/manual/grouping.html>Member Groups</a>中的示例，其中有几项注意点：</p><ol><li>无nosubgrouping：成员分组中跨类别(public/protected/private/static等)情形下，将自动将命名的组与默认组平级（莫误以为在class的实现上添加的分组就一定会平级）。</li><li>有nosubgrouping：未命名的分组表现有些怪异，当所有成员分组都在class内部定义时，未命名分组中内容将填充到默认分组下；若分组定义不在class的{}内部(例：包含方法的实现Test::func())时，未命名分组将追加到class外部定义分组的后面。</li><li>分组name相同时，将显示在同一个组里；分组不能嵌套</li></ol></blockquote><h3 id=规范私用>规范(私用)</h3><blockquote><ol><li><p>禁用所有子组，在有成员分组功能的class或类中必须添加@nosubgrouping</p></li><li><p>禁用不带name的未命名分组</p></li><li><p>class的所有分组定义必须包含在{}范围内，禁止在class外的实现上定义分组</p></li></ol></blockquote></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>孤梦</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2015-04-12</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/doxygen/>doxygen</a>
+<a href=/tags/c/c++/>c/c++</a></div><nav class=post-nav><a class=prev href=/post/pg_ci/test/gmock_run_env_for_vs/><i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">0-1 gmock run env for VS</span>
+<span class="prev-text nav-mobile">Prev</span></a>
+<a class=next href=/post/pg_sundry/doxygen/0-0-doxygen%E6%B3%A8%E9%87%8A%E7%AE%80%E8%A7%84%E5%9F%BA%E7%A1%80/><span class="next-text nav-default">doxygen注释简规(基础)</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:932394170@qq.com class="iconfont icon-email" title=email></a><a href=https://github.com/dreamonlysh/ class="iconfont icon-github" title=github></a><a href=https://www.guyuemeng.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2012 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>孤梦</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script></body></html>

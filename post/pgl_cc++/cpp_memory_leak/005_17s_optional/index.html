@@ -1,0 +1,427 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>005 17s optional - gumeng's blog.</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="孤梦"><meta name=description content="本文用于初步探索C++17引入的std::optional的使用与性能。 Verification Case 知识补充 如下代码，或多或少还是会见到一些： 1 2 3 4 5 6 7 8 9 10 11"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.83.1 with theme even"><link rel=canonical href=https://www.guyuemeng.com/post/pgl_cc++/cpp_memory_leak/005_17s_optional/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="005 17s optional"><meta property="og:description" content="本文用于初步探索C++17引入的std::optional的使用与性能。 Verification Case 知识补充 如下代码，或多或少还是会见到一些： 1 2 3 4 5 6 7 8 9 10 11"><meta property="og:type" content="article"><meta property="og:url" content="https://www.guyuemeng.com/post/pgl_cc++/cpp_memory_leak/005_17s_optional/"><meta property="article:section" content="post"><meta property="article:published_time" content="2020-04-09T23:55:36+08:00"><meta property="article:modified_time" content="2020-04-09T23:55:36+08:00"><meta itemprop=name content="005 17s optional"><meta itemprop=description content="本文用于初步探索C++17引入的std::optional的使用与性能。 Verification Case 知识补充 如下代码，或多或少还是会见到一些： 1 2 3 4 5 6 7 8 9 10 11"><meta itemprop=datePublished content="2020-04-09T23:55:36+08:00"><meta itemprop=dateModified content="2020-04-09T23:55:36+08:00"><meta itemprop=wordCount content="1903"><meta itemprop=keywords content="cpp_memory_leak,c/c++,"><meta name=twitter:card content="summary"><meta name=twitter:title content="005 17s optional"><meta name=twitter:description content="本文用于初步探索C++17引入的std::optional的使用与性能。 Verification Case 知识补充 如下代码，或多或少还是会见到一些： 1 2 3 4 5 6 7 8 9 10 11"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>孤梦</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>孤梦</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>005 17s optional</h1><div class=post-meta><span class=post-time>2020-04-09</span><div class=post-category><a href=/categories/cpp_memory_leak/>cpp_memory_leak</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li><a href=#verification-case>Verification Case</a><ul><li><a href=#知识补充>知识补充</a></li><li><a href=#函数汇编对比>函数汇编对比</a></li></ul></li><li><a href=#结论>结论</a></li></ul></li></ul></nav></div></div><div class=post-content><p>本文用于初步探索<code>C++17</code>引入的<code>std::optional</code>的使用与性能。</p><h2 id=verification-case>Verification Case</h2><h3 id=知识补充>知识补充</h3><p>如下代码，或多或少还是会见到一些：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// xxx.h
+</span><span class=c1></span><span class=k>enum</span> <span class=nc>Kind</span> <span class=p>{</span>
+  <span class=n>kFirstKind</span><span class=p>,</span>
+  <span class=n>kSecondKind</span>
+<span class=p>};</span>
+
+<span class=c1>// zzz.cpp
+</span><span class=c1></span><span class=kt>int</span> <span class=nf>calcKind</span><span class=p>(</span><span class=kt>int</span> <span class=n>input</span><span class=p>)</span> <span class=p>{</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>input</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span>
+    <span class=k>return</span> <span class=n>kFirstKind</span><span class=p>;</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>input</span> <span class=o>&lt;</span> <span class=mi>0</span><span class=p>)</span>
+    <span class=k>return</span> <span class=n>kSecondKind</span><span class=p>;</span>
+  <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+  <span class=kt>int</span> <span class=n>result</span> <span class=o>=</span> <span class=n>calcKind</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>result</span> <span class=o>!=</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+    <span class=k>return</span> <span class=n>result</span><span class=p>;</span>
+  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><p>这里存在好些问题：</p><ol><li>表达上，<code>kFirstKind</code>/<code>kSecondKind</code>与<code>-1</code>归属于不同类型(虽然<code>decay</code>类型相同)</li><li><code>Kind</code>属于接口，<code>calcKind</code>属于实现，接口定义不会反依赖实现，而此处<code>-1</code>占用了<code>Kind</code>的一个可选值(污染)，这在逻辑上是有风险的</li><li><code>-1</code>有可能在多处使用，而成为一个难以感知的，默认非法值定义，属于隐式接口，并造成散弹式的局面</li><li>当前程序定义为<code>-1</code>，同样在另外的程序可能定义成<code>INT32_MAX</code></li></ol><p>那么使用<code>std::optional</code>可以解决此问题，改造后的代码如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// zzz.cpp
+</span><span class=c1></span><span class=n>std</span><span class=o>::</span><span class=n>optional</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>calcKind</span><span class=p>(</span><span class=kt>int</span> <span class=n>input</span><span class=p>)</span> <span class=p>{</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>input</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span>
+    <span class=k>return</span> <span class=n>std</span><span class=o>::</span><span class=n>make_optional</span><span class=p>(</span><span class=n>kFirstKind</span><span class=p>);</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>input</span> <span class=o>&lt;</span> <span class=mi>0</span><span class=p>)</span>
+    <span class=k>return</span> <span class=n>std</span><span class=o>::</span><span class=n>make_optional</span><span class=p>(</span><span class=n>kSecondKind</span><span class=p>);</span>
+  <span class=k>return</span> <span class=n>std</span><span class=o>::</span><span class=n>nullopt</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>auto</span> <span class=n>result</span> <span class=o>=</span> <span class=n>calcKind</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>result</span><span class=p>.</span><span class=n>has_value</span><span class=p>())</span>
+    <span class=k>return</span> <span class=n>result</span><span class=p>.</span><span class=n>value</span><span class=p>();</span>
+  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><p>以上4个问题几乎都解决掉了，接下来再看下性能影响。</p><h3 id=函数汇编对比>函数汇编对比</h3><p>使用<code>std::optional</code>的主要场景是存在分支条件的返回值，构建如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=kt>bool</span> <span class=n>cond</span> <span class=o>=</span> <span class=nb>true</span><span class=p>;</span>
+<span class=kt>int</span> <span class=n>g_int_value</span> <span class=o>=</span> <span class=mi>100</span><span class=p>;</span>
+
+<span class=kt>int</span> <span class=n>g_result</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=k>auto</span> <span class=nf>getOrigin</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>cond</span><span class=p>)</span>
+    <span class=k>return</span> <span class=n>g_int_value</span><span class=p>;</span>
+  <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=n>std</span><span class=o>::</span><span class=n>optional</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>getOpt</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>cond</span><span class=p>)</span>
+    <span class=k>return</span> <span class=n>std</span><span class=o>::</span><span class=n>make_optional</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span><span class=p>(</span><span class=n>g_int_value</span><span class=p>);</span>
+  <span class=k>return</span> <span class=n>std</span><span class=o>::</span><span class=n>nullopt</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=kt>void</span> <span class=nf>testGetOrigin</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>auto</span> <span class=n>v</span> <span class=o>=</span> <span class=n>getOrigin</span><span class=p>();</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>v</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span>
+    <span class=n>g_result</span> <span class=o>=</span> <span class=n>v</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=kt>void</span> <span class=nf>testGetOpt</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>auto</span> <span class=n>v</span> <span class=o>=</span> <span class=n>getOpt</span><span class=p>();</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>v</span><span class=p>.</span><span class=n>has_value</span><span class=p>())</span>
+    <span class=n>g_result</span> <span class=o>=</span> <span class=n>v</span><span class=p>.</span><span class=n>value</span><span class=p>();</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><p><code>gcc9.3 -std=c++17 -O2</code>生成汇编(<a href=https://godbolt.org/>godbolt</a>)如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>getOrigin():
+        cmp     BYTE PTR cond[rip], 0
+        mov     eax, -1
+        cmovne  eax, DWORD PTR g_int_value[rip]
+        ret
+getOpt():
+        cmp     BYTE PTR cond[rip], 0
+        je      .L6
+        mov     eax, DWORD PTR g_int_value[rip]
+        mov     BYTE PTR [rsp-4], 1
+        mov     DWORD PTR [rsp-8], eax
+        mov     rax, QWORD PTR [rsp-8]
+        ret
+.L6:
+        mov     BYTE PTR [rsp-4], 0
+        mov     rax, QWORD PTR [rsp-8]
+        ret
+testGetOrigin():
+        cmp     BYTE PTR cond[rip], 0
+        je      .L8
+        mov     eax, DWORD PTR g_int_value[rip]
+        test    eax, eax
+        jle     .L8
+        mov     DWORD PTR g_result[rip], eax
+.L8:
+        ret
+testGetOpt():
+        cmp     BYTE PTR cond[rip], 0
+        je      .L10
+        mov     eax, DWORD PTR g_int_value[rip]
+        mov     DWORD PTR g_result[rip], eax
+.L10:
+        ret
+</code></pre></td></tr></table></div></div><p>可以看到<code>getOpt()</code>函数比<code>getOrigin</code>要多不少指令，但其在测试函数被内联后，<code>testGetOpt()</code>竟然获得了更优的优化。</p><p>再试试<code>clang10</code>，生成汇编如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>getOrigin():                          # @getOrigin()
+        xor     eax, eax
+        cmp     byte ptr [rip + cond], 1
+        sbb     eax, eax
+        or      eax, dword ptr [rip + g_int_value]
+        ret
+getOpt():                             # @getOpt()
+        movzx   eax, byte ptr [rip + cond]
+        mov     ecx, dword ptr [rip + g_int_value]
+        shl     rax, 32
+        or      rax, rcx
+        ret
+testGetOrigin():                     # @testGetOrigin()
+        xor     eax, eax
+        cmp     byte ptr [rip + cond], 1
+        sbb     eax, eax
+        or      eax, dword ptr [rip + g_int_value]
+        test    eax, eax
+        jle     .LBB2_2
+        mov     dword ptr [rip + g_result], eax
+.LBB2_2:
+        ret
+testGetOpt():                        # @testGetOpt()
+        cmp     byte ptr [rip + cond], 0
+        je      .LBB3_2
+        mov     eax, dword ptr [rip + g_int_value]
+        mov     dword ptr [rip + g_result], eax
+.LBB3_2:
+        ret
+</code></pre></td></tr></table></div></div><p>可以看到<code>getOpt()</code>函数和<code>getOrigin</code>指令数相同，<code>testGetOpt()</code>同样获得了比较优的优化。从当前分析来看，<code>std::optional</code>来解决这类问题可行。</p><p>当存在多路径返回时，很多情况下是无法进行内联的，所以测试下禁用内联的情况：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>auto</span> <span class=nf>getOrigin</span><span class=p>()</span> <span class=n>__attribute__</span><span class=p>((</span><span class=n>noinline</span><span class=p>));</span>
+<span class=n>std</span><span class=o>::</span><span class=n>optional</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>getOpt</span><span class=p>()</span> <span class=n>__attribute__</span><span class=p>((</span><span class=n>noinline</span><span class=p>));</span>
+</code></pre></td></tr></table></div></div><p><code>gcc9.3 -std=c++17 -O2</code>生成汇编(<a href=https://godbolt.org/>godbolt</a>)如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>testGetOrigin():
+        call    getOrigin()
+        test    eax, eax
+        jle     .L8
+        mov     DWORD PTR g_result[rip], eax
+.L8:
+        ret
+testGetOpt():
+        sub     rsp, 16
+        call    getOpt()
+        mov     rdx, rax
+        mov     QWORD PTR [rsp+8], rax
+        shr     rdx, 32
+        test    dl, dl
+        je      .L10
+        mov     eax, DWORD PTR [rsp+8]
+        mov     DWORD PTR g_result[rip], eax
+.L10:
+        add     rsp, 16
+        ret
+</code></pre></td></tr></table></div></div><p><code>gcc</code>下情况比较坏，再试试<code>clang10</code>，生成汇编如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>testGetOrigin():                     # @testGetOrigin()
+        push    rax
+        call    getOrigin()
+        test    eax, eax
+        jle     .LBB2_2
+        mov     dword ptr [rip + g_result], eax
+.LBB2_2:
+        pop     rax
+        ret
+testGetOpt():                        # @testGetOpt()
+        push    rax
+        call    getOpt()
+        movabs  rcx, 1095216660480
+        test    rax, rcx
+        je      .LBB3_2
+        mov     dword ptr [rip + g_result], eax
+.LBB3_2:
+        pop     rax
+        ret
+</code></pre></td></tr></table></div></div><p><code>clang</code>的优化效果非常好，也比较稳定，相对而言<code>gcc</code>对于对象本身的优化似乎有所缺失。虽然<code>gcc</code>有所缺失，但咱不能因此而否定<code>std::optional</code>，此处依然可行。</p><p>再试试<code>std::string</code>对比下(此处只附结论)：</p><p><code>gcc9.3 -std=c++17 -O2</code>生成汇编(<a href=https://godbolt.org/>godbolt</a>)如下：</p><p><code>getOrigin</code>: 20, <code>testGetOrigin</code>: 20 + [clone .cold]7</p><p><code>getOpt</code>: 18, <code>testGetOpt</code>:25 + [clone .cold]10</p><p><code>clang10 -std=c++17 -O2</code>命令下使用<code>std::optional</code>与不适用情况下，指令数几乎相等。(从上述数据来看，<code>clang</code>的编译优化相对比较稳定，<code>gcc</code>的优化波动比较大)。</p><p>题外话，再对比下<code>std::optional</code>内存占用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=kt>int32_t</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=n>std</span><span class=o>::</span><span class=n>optional</span><span class=o>&lt;</span><span class=kt>int32_t</span><span class=o>&gt;</span> <span class=n>io</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>make_optional</span><span class=o>&lt;</span><span class=kt>int32_t</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+
+<span class=kt>int64_t</span> <span class=n>l</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+<span class=n>std</span><span class=o>::</span><span class=n>optional</span><span class=o>&lt;</span><span class=kt>int64_t</span><span class=o>&gt;</span> <span class=n>lo</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>make_optional</span><span class=o>&lt;</span><span class=kt>int64_t</span><span class=o>&gt;</span><span class=p>(</span><span class=mi>1</span><span class=p>);</span>
+
+<span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>s</span> <span class=o>=</span> <span class=s>&#34;0&#34;</span><span class=p>;</span>
+<span class=n>std</span><span class=o>::</span><span class=n>optional</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>string</span><span class=o>&gt;</span> <span class=n>so</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>make_optional</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>string</span><span class=o>&gt;</span><span class=p>(</span><span class=s>&#34;1&#34;</span><span class=p>);</span>
+
+<span class=k>struct</span> <span class=nc>A</span> <span class=p>{</span>
+  <span class=kt>int64_t</span> <span class=n>a</span><span class=p>;</span>
+  <span class=kt>int32_t</span> <span class=n>b</span><span class=p>;</span>
+<span class=p>};</span>
+
+<span class=n>A</span> <span class=n>a</span><span class=p>;</span>
+<span class=n>std</span><span class=o>::</span><span class=n>optional</span><span class=o>&lt;</span><span class=n>A</span><span class=o>&gt;</span> <span class=n>ao</span><span class=p>;</span>
+</code></pre></td></tr></table></div></div><p><code>gcc9.3 -std=c++17 -O2</code>生成汇编(<a href=https://godbolt.org/>godbolt</a>)如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>ao:
+        .quad   0
+        .long   0
+        .zero   4
+        .byte   1
+        .zero   7
+a:
+        .zero   16
+so[abi:cxx11]:
+        .zero   40
+s[abi:cxx11]:
+        .zero   32
+lo:
+        .quad   1
+        .byte   1
+        .zero   7
+l:
+        .zero   8
+io:
+        .long   1
+        .byte   1
+        .zero   3
+i:
+        .zero   4
+</code></pre></td></tr></table></div></div><p>比较明显，<code>std::optional</code>并未在控制内存上做出什么努力，依然额外占用了<code>bit->byte->align(T)</code>的空间。这点确实没有惊喜，本期望上例中<code>std::optional</code>中用作判断的数据可以优化到<code>struct A</code>中补齐的4bytes。</p><h2 id=结论>结论</h2><p>在编译器优化的波动范围内，</p><ol><li>作为返回值时，<code>std::optional</code>与传统方式拥有几乎相同的性能，所以推荐使用</li><li>作为对象成员或全局对象时，由于<code>std::optional</code>没有内存优化，所以不推荐使用，即不推荐存储<code>std::optional</code>类型的数据。</li></ol></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>孤梦</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2020-04-09</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/cpp_memory_leak/>cpp_memory_leak</a>
+<a href=/tags/c/c++/>c/c++</a></div><nav class=post-nav><a class=prev href=/post/pgl_cc++/cpp_memory_leak/006_17s_any/><i class="iconfont icon-left"></i>
+<span class="prev-text nav-default">006 17s any</span>
+<span class="prev-text nav-mobile">Prev</span></a>
+<a class=next href=/post/pgl_cc++/cpp_memory_leak/004_usage_of_static_local/><span class="next-text nav-default">004 usage of static local</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:932394170@qq.com class="iconfont icon-email" title=email></a><a href=https://github.com/dreamonlysh/ class="iconfont icon-github" title=github></a><a href=https://www.guyuemeng.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2012 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>孤梦</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script></body></html>
