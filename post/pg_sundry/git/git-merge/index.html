@@ -1,0 +1,191 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>git merge - gumeng's blog.</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="朦呆农码"><meta name=description content="git merge的基本用法 **get merge：**将指定分支的修改合并到当前分支 其包含了两种合并模式：fast-forward、no-fast-for"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.83.1 with theme even"><link rel=canonical href=https://www.guyuemeng.com/post/pg_sundry/git/git-merge/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="git merge"><meta property="og:description" content="git merge的基本用法 **get merge：**将指定分支的修改合并到当前分支 其包含了两种合并模式：fast-forward、no-fast-for"><meta property="og:type" content="article"><meta property="og:url" content="https://www.guyuemeng.com/post/pg_sundry/git/git-merge/"><meta property="article:section" content="post"><meta property="article:published_time" content="2021-11-03T16:45:31+08:00"><meta property="article:modified_time" content="2021-11-03T16:45:31+08:00"><meta itemprop=name content="git merge"><meta itemprop=description content="git merge的基本用法 **get merge：**将指定分支的修改合并到当前分支 其包含了两种合并模式：fast-forward、no-fast-for"><meta itemprop=datePublished content="2021-11-03T16:45:31+08:00"><meta itemprop=dateModified content="2021-11-03T16:45:31+08:00"><meta itemprop=wordCount content="1824"><meta itemprop=keywords content="git,"><meta name=twitter:card content="summary"><meta name=twitter:title content="git merge"><meta name=twitter:description content="git merge的基本用法 **get merge：**将指定分支的修改合并到当前分支 其包含了两种合并模式：fast-forward、no-fast-for"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>朦呆农码</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>朦呆农码</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>git merge</h1><div class=post-meta><span class=post-time>2021-11-03</span><div class=post-category><a href=/categories/tools/>tools</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><ul><li><a href=#git-merge的基本用法><code>git merge</code>的基本用法</a><ul><li><a href=#fast-forward>fast-forward</a></li><li><a href=#no-fast-forward>no-fast-forward</a></li><li><a href=#选项--no-ff>选项<code>--no-ff</code></a></li><li><a href=#选项--no-ff---no-commit>选项<code>--no-ff --no-commit</code></a></li></ul></li><li><a href=#附录>附录</a><ul><li><a href=#文中用例的构建>文中用例的构建</a></li></ul></li><li><a href=#参考资料>参考资料</a></li></ul></li></ul></nav></div></div><div class=post-content><h2 id=git-merge的基本用法><code>git merge</code>的基本用法</h2><p>**<code>get merge</code>：**将指定分支的修改合并到当前分支</p><p>其包含了两种合并模式：fast-forward、no-fast-forward</p><h3 id=fast-forward>fast-forward</h3><p>**fast-forward：**将目标分支的HEAD快速推进到待merge分支HEAD所指向的commit</p><p>这是一种执行快速、合并效果美观的合并方式，就如同待merge分支上的commits本就提交的是目标分支一样</p><p><em>注：达成条件比较苛刻，需要待merge分支从目标分支拉出后，目标分支无新commit(可尝试在待merge分支merge前执行<code>git rebase</code>，这种场景比较常见)</em></p><p>演示如下：master分支存有2个commits，a分支从master分支创建并新增3个新commits</p><p>通过以下命令可以观测到commit的节点树：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>$ git log --graph --pretty<span class=o>=</span>oneline --abbrev-commit
+</code></pre></td></tr></table></div></div><ul><li>master分支</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=o>*</span> <span class=nf>ace4903</span> <span class=p>(</span><span class=nx>HEAD</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>master</span><span class=p>)</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>303</span><span class=nx>ad04</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><p>master HEAD -> ace4903</p><ul><li>a分支</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=o>*</span> <span class=mi>9923</span><span class=nf>b85</span> <span class=p>(</span><span class=nx>HEAD</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>a</span><span class=p>)</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>3</span>
+<span class=o>*</span> <span class=nx>a0d70a7</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>5029</span><span class=nx>c65</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>1</span>
+<span class=o>*</span> <span class=nf>ace4903</span> <span class=p>(</span><span class=nx>master</span><span class=p>)</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>303</span><span class=nx>ad04</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><p>master HEAD -> ace4903</p><p>a HEAD -> 9923b85</p><ul><li>master分支上执行<code>get merge a</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=o>*</span> <span class=mi>9923</span><span class=nf>b85</span> <span class=p>(</span><span class=nx>HEAD</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>master</span><span class=p>,</span> <span class=nx>a</span><span class=p>)</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>3</span>
+<span class=o>*</span> <span class=nx>a0d70a7</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>5029</span><span class=nx>c65</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>1</span>
+<span class=o>*</span> <span class=nx>ace4903</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>303</span><span class=nx>ad04</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><p>master HEAD -> 9923b85</p><p>a HEAD -> 9923b85</p><p>合并后，目标分支依然是一条直线，没有分叉。</p><h3 id=no-fast-forward>no-fast-forward</h3><p>**no-fast-forward：**通用的合并方式，将产生一个独立的merge commit</p><p>演示如下：master分支存有2个commits，a分支从master分支创建并新增3个新commits，b分支从master分支创建并新增3个新commits，a、b分支的第2个commit修改冲突</p><ul><li>master分支(已merge分支a)</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=o>*</span> <span class=mi>9923</span><span class=nf>b85</span> <span class=p>(</span><span class=nx>HEAD</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>master</span><span class=p>,</span> <span class=nx>a</span><span class=p>)</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>3</span>
+<span class=o>*</span> <span class=nx>a0d70a7</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>5029</span><span class=nx>c65</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>1</span>
+<span class=o>*</span> <span class=nx>ace4903</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>303</span><span class=nx>ad04</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><p>master HEAD -> 9923b85</p><ul><li>b分支</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=o>*</span> <span class=mi>6378</span><span class=nf>c47</span> <span class=p>(</span><span class=nx>HEAD</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>b</span><span class=p>)</span> <span class=nx>b</span><span class=p>:</span> <span class=mi>3</span>
+<span class=o>*</span> <span class=mi>0</span><span class=nx>eda1f7</span> <span class=nx>b</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=nx>af37583</span> <span class=nx>b</span><span class=p>:</span> <span class=mi>1</span>
+<span class=o>*</span> <span class=nf>ace4903</span> <span class=p>(</span><span class=nx>master</span><span class=p>)</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>303</span><span class=nx>ad04</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><p>master HEAD -> ace4903</p><p>b HEAD -> 6378c47</p><ul><li>master分支上执行<code>get merge b</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=o>*</span>   <span class=mi>6153</span><span class=nf>f56</span> <span class=p>(</span><span class=nx>HEAD</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>master</span><span class=p>)</span> <span class=nx>Merge</span> <span class=nx>branch</span> <span class=sc>&#39;b&#39;</span>
+<span class=p>|</span>\
+<span class=p>|</span> <span class=o>*</span> <span class=mi>6378</span><span class=nf>c47</span> <span class=p>(</span><span class=nx>b</span><span class=p>)</span> <span class=nx>b</span><span class=p>:</span> <span class=mi>3</span>
+<span class=p>|</span> <span class=o>*</span> <span class=mi>0</span><span class=nx>eda1f7</span> <span class=nx>b</span><span class=p>:</span> <span class=mi>2</span>
+<span class=p>|</span> <span class=o>*</span> <span class=nx>af37583</span> <span class=nx>b</span><span class=p>:</span> <span class=mi>1</span>
+<span class=o>*</span> <span class=p>|</span> <span class=mi>9923</span><span class=nf>b85</span> <span class=p>(</span><span class=nx>a</span><span class=p>)</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>3</span>
+<span class=o>*</span> <span class=p>|</span> <span class=nx>a0d70a7</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=p>|</span> <span class=mi>5029</span><span class=nx>c65</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>1</span>
+<span class=p>|</span><span class=o>/</span>
+<span class=o>*</span> <span class=nx>ace4903</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>303</span><span class=nx>ad04</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><p>master HEAD -> 6153f56</p><p>b HEAD -> 6378c47</p><p>合并后结果：第一列是master分支，第二列是b分支，<code>*</code>代表有效commit，<code>|</code>、<code>/</code>、<code>\</code>是分支连线</p><p>合并后出现了明显分叉，分支关系变得复杂。</p><p><code>git merge b</code>的git操作全过程</p><blockquote><p>$ git merge b [master]
+Auto-merging README
+CONFLICT (content): Merge conflict in README
+Automatic merge failed; fix conflicts and then commit the result.</p><p>$ vim README</p><p># resolve confilicits</p><p>$ git add README</p><p>$ git commit [master]
+[master df0e8f3] Merge branch &lsquo;b&rsquo;</p></blockquote><p>可以分为三个阶段：1. merge，2，resolve confilicits，3. commit</p><p>merge新增的commit具有显示的<strong>Merge</strong>标记（如下第二行）</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>$ git log
+</code></pre></td></tr></table></div></div><blockquote><p>commit 96caeda32150df24541e2d55d2ca6ec1dd861416 (HEAD -> master)
+Merge: ace4903 9923b85
+Author: gumeng.xl <a href=mailto:gumeng.xl@bytedance.com>gumeng.xl@bytedance.com</a>
+Date: Thu Nov 4 14:44:19 2021 +0800</p><pre><code>Merge branch 'a'
+</code></pre></blockquote><h3 id=选项--no-ff>选项<code>--no-ff</code></h3><p><code>git merge</code>默认采用的是<code>--ff</code>选项，即默认fast-forward。</p><p>若需要统一<code>git merge</code>时均要产生单独的commit记录，则需要<code>--no-ff</code>强制关闭fast-forward模式</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>$ git merge a --no-ff
+</code></pre></td></tr></table></div></div><p>弹出merge commit message的编辑界面</p><blockquote><p>Merge made by the &lsquo;recursive&rsquo; strategy.
+README | 2 +-
+a/README | 1 +
+2 files changed, 2 insertions(+), 1 deletion(-)
+create mode 100644 a/README</p></blockquote><p>最终git log graph</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-go data-lang=go><span class=o>*</span>   <span class=mi>146</span><span class=nf>ba8c</span> <span class=p>(</span><span class=nx>HEAD</span> <span class=o>-</span><span class=p>&gt;</span> <span class=nx>master</span><span class=p>)</span> <span class=nx>Merge</span> <span class=nx>branch</span> <span class=sc>&#39;a&#39;</span>
+<span class=p>|</span>\
+<span class=p>|</span> <span class=o>*</span> <span class=mi>9923</span><span class=nf>b85</span> <span class=p>(</span><span class=nx>a</span><span class=p>)</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>3</span>
+<span class=p>|</span> <span class=o>*</span> <span class=nx>a0d70a7</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>2</span>
+<span class=p>|</span> <span class=o>*</span> <span class=mi>5029</span><span class=nx>c65</span> <span class=nx>a</span><span class=p>:</span> <span class=mi>1</span>
+<span class=p>|</span><span class=o>/</span>
+<span class=o>*</span> <span class=nx>ace4903</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>2</span>
+<span class=o>*</span> <span class=mi>303</span><span class=nx>ad04</span> <span class=nx>master</span><span class=p>:</span> <span class=mi>1</span>
+</code></pre></td></tr></table></div></div><h3 id=选项--no-ff---no-commit>选项<code>--no-ff --no-commit</code></h3><p><code>git merge --no--ff</code>内部过程分为两个步骤，merge + commit。</p><p><code>--no-commit</code>将其中的commit过程剥离，增加了一次手动commit确认的机会</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>$ git merge a --no-ff --no-commit
+</code></pre></td></tr></table></div></div><blockquote><p>Automatic merge went well; stopped before committing as requested</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>$ git status
+</code></pre></td></tr></table></div></div><blockquote><p>On branch master
+All conflicts fixed but you are still merging.
+(use &ldquo;git commit&rdquo; to conclude merge)</p><p>Changes to be committed:
+modified: README
+new file: a/README</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>$ git commit
+</code></pre></td></tr></table></div></div><p>弹出merge commit message的编辑界面</p><blockquote><p>[master 96caeda] Merge branch &lsquo;a&rsquo;</p></blockquote><h2 id=附录>附录</h2><h3 id=文中用例的构建>文中用例的构建</h3><ol><li>创建测试用初始git仓</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>mkdir git
+<span class=nb>cd</span> git
+git init .
+</code></pre></td></tr></table></div></div><ol start=2><li>在master上新增2个commits</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>touch README
+git add README
+git commit -m <span class=s2>&#34;master: 1&#34;</span>
+
+<span class=nb>echo</span> <span class=s2>&#34;master has README&#34;</span> &gt; README
+git add README
+git commit -m <span class=s2>&#34;master: 2&#34;</span>
+</code></pre></td></tr></table></div></div><ol start=3><li>基于master创建分支a，新增3个commits</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>git checkout -b a
+mkdir a<span class=p>;</span> touch a/README
+git add .
+git commit -m <span class=s2>&#34;a: 1&#34;</span>
+
+<span class=nb>echo</span> <span class=s2>&#34;master has README and a/README&#34;</span> &gt; README
+git add .
+git commit -m <span class=s2>&#34;a: 2&#34;</span>
+
+<span class=nb>echo</span> <span class=s2>&#34;a has README&#34;</span> &gt; a/README
+git add .
+git commit -m <span class=s2>&#34;a: 3&#34;</span>
+</code></pre></td></tr></table></div></div><ol start=4><li>基于master创建分支b，新增3个commits，其中第2个commit与a的第2个commit冲突</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>git checkout master
+git checkout -b b
+mkdir b<span class=p>;</span> touch b/README
+git add .
+git commit -m <span class=s2>&#34;b: 1&#34;</span>
+
+<span class=nb>echo</span> <span class=s2>&#34;master has README and b/README&#34;</span> &gt; README
+git add .
+git commit -m <span class=s2>&#34;b: 2&#34;</span>
+
+<span class=nb>echo</span> <span class=s2>&#34;b has README&#34;</span> &gt; b/README
+git add .
+git commit -m <span class=s2>&#34;b: 3&#34;</span>
+</code></pre></td></tr></table></div></div><h2 id=参考资料>参考资料</h2><p>[1] git-merge - Join two or more development histories together.<a href=https://git-scm.com/docs/git-merge>https://git-scm.com/docs/git-merge</a></p><p>[2] 创建与合并分支。<a href=https://www.liaoxuefeng.com/wiki/896043488029600/900003767775424>https://www.liaoxuefeng.com/wiki/896043488029600/900003767775424</a></p><p>[3] 解决冲突。<a href=https://www.liaoxuefeng.com/wiki/896043488029600/900004111093344>https://www.liaoxuefeng.com/wiki/896043488029600/900004111093344</a></p></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>朦呆农码</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2021-11-03</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/git/>git</a></div><nav class=post-nav><a class=next href=/post/pg_sundry/zsh/oh_my_zsh/><span class="next-text nav-default">Issue with oh my zsh.</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:932394170@qq.com class="iconfont icon-email" title=email></a><a href=https://github.com/dreamonlysh/ class="iconfont icon-github" title=github></a><a href=https://www.guyuemeng.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2012 -
+2021<span class=heart><i class="iconfont icon-heart"></i></span><span>朦呆农码</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script></body></html>
