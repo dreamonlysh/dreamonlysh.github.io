@@ -1,0 +1,459 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>LLVM Loop Optimization - Full Unroll - gumeng's blog.</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="朦呆农码"><meta name=description content="The For Structure Code Block 多数通用语言的 for loop 具备以下的结构： 1 2 3 for (InitStmt; Condition; IncStmt) { // code block to be executed } 注：for range 是语言层面对于迭代器封装的语法糖。 结合 for 的上下文，可以"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.83.1 with theme even"><link rel=canonical href=https://www.guyuemeng.com/post/pg_llvm/llvm-loop-optimization-full-unroll/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="LLVM Loop Optimization - Full Unroll"><meta property="og:description" content="The For Structure Code Block 多数通用语言的 for loop 具备以下的结构： 1 2 3 for (InitStmt; Condition; IncStmt) { // code block to be executed } 注：for range 是语言层面对于迭代器封装的语法糖。 结合 for 的上下文，可以"><meta property="og:type" content="article"><meta property="og:url" content="https://www.guyuemeng.com/post/pg_llvm/llvm-loop-optimization-full-unroll/"><meta property="article:section" content="post"><meta property="article:published_time" content="2022-01-18T10:57:31+08:00"><meta property="article:modified_time" content="2022-01-18T10:57:31+08:00"><meta itemprop=name content="LLVM Loop Optimization - Full Unroll"><meta itemprop=description content="The For Structure Code Block 多数通用语言的 for loop 具备以下的结构： 1 2 3 for (InitStmt; Condition; IncStmt) { // code block to be executed } 注：for range 是语言层面对于迭代器封装的语法糖。 结合 for 的上下文，可以"><meta itemprop=datePublished content="2022-01-18T10:57:31+08:00"><meta itemprop=dateModified content="2022-01-18T10:57:31+08:00"><meta itemprop=wordCount content="2828"><meta itemprop=keywords content="llvm,loop,optimization,"><meta name=twitter:card content="summary"><meta name=twitter:title content="LLVM Loop Optimization - Full Unroll"><meta name=twitter:description content="The For Structure Code Block 多数通用语言的 for loop 具备以下的结构： 1 2 3 for (InitStmt; Condition; IncStmt) { // code block to be executed } 注：for range 是语言层面对于迭代器封装的语法糖。 结合 for 的上下文，可以"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>朦呆农码</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>朦呆农码</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>LLVM Loop Optimization - Full Unroll</h1><div class=post-meta><span class=post-time>2022-01-18</span><div class=post-category><a href=/categories/llvm/>llvm</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><a href=#the-for-structure>The For Structure</a><ul><li><a href=#code-block>Code Block</a></li><li><a href=#control-flow>Control Flow</a></li><li><a href=#loop-simplify-form>Loop Simplify Form</a></li><li><a href=#lcssaloop-closed-ssa>LCSSA(Loop Closed SSA)</a></li><li><a href=#llvm-loop-vs-function>LLVM Loop vs Function</a></li><li><a href=#simple-for-loop-in-llvm-ir>Simple For Loop in LLVM IR</a></li></ul></li><li><a href=#simple-loop-full-unroll-route---compiled-with-o2>Simple Loop Full Unroll Route - Compiled with O2</a><ul><li><a href=#pass-sroascalar-replacement-of-aggregates>Pass: sroa(Scalar Replacement of Aggregates)</a></li><li><a href=#pass-loop-rotate>Pass: loop-rotate</a></li><li><a href=#pass-loop-unroll-full>Pass: loop-unroll-full</a></li><li><a href=#pass-gvnglobal-value-numbering>Pass: gvn(Global Value Numbering)</a></li></ul></li><li><a href=#simple-loop-full-unroll-route---simplify>Simple Loop Full Unroll Route - Simplify</a><ul><li><a href=#pass-mem2reg>Pass: mem2reg</a></li><li><a href=#pass-loop-unroll-full-1>Pass: loop-unroll-full</a></li><li><a href=#pass-simplifycfg>Pass: simplifycfg</a></li></ul></li><li><a href=#reference>Reference</a></li></ul></nav></div></div><div class=post-content><h1 id=the-for-structure>The For Structure</h1><h2 id=code-block>Code Block</h2><p>多数通用语言的 for loop 具备以下的结构：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=k>for</span> <span class=p>(</span><span class=n>InitStmt</span><span class=p>;</span> <span class=n>Condition</span><span class=p>;</span> <span class=n>IncStmt</span><span class=p>)</span> <span class=p>{</span>
+  <span class=c1>// code block to be executed
+</span><span class=c1></span><span class=p>}</span>
+</code></pre></td></tr></table></div></div><p><em>注：for range 是语言层面对于迭代器封装的语法糖。</em></p><p>结合 for 的上下文，可以将代码按以下块进行划分：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=k>for</span><span class=p>.</span><span class=n>before</span> <span class=k>for</span><span class=p>{</span><span class=k>for</span><span class=p>.</span><span class=n>init</span> <span class=k>for</span><span class=p>.</span><span class=n>cond</span> <span class=k>for</span><span class=p>.</span><span class=n>body</span> <span class=k>for</span><span class=p>.</span><span class=n>inc</span> <span class=p>}</span> <span class=k>for</span><span class=p>.</span><span class=n>after</span>
+</code></pre></td></tr></table></div></div><p>其中 for.init 通常亦会提取到 for loop 外进行，其唯一的区别在于作用域是否扩展到 for.after，所以可以进一步划分：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=p>{</span><span class=k>for</span><span class=p>.</span><span class=n>before</span> <span class=k>for</span><span class=p>.</span><span class=n>init</span><span class=p>}</span> <span class=k>for</span><span class=p>.</span><span class=n>cond</span> <span class=k>for</span><span class=p>.</span><span class=n>body</span> <span class=k>for</span><span class=p>.</span><span class=n>inc</span> <span class=k>for</span><span class=p>.</span><span class=n>after</span>
+</code></pre></td></tr></table></div></div><h2 id=control-flow>Control Flow</h2><p>对于一个 for loop，可以简单的看做：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c><span class=k>for</span><span class=p>.</span><span class=n>head</span>
+  <span class=p>[</span><span class=n>jmp</span> <span class=k>for</span><span class=p>.</span><span class=n>tail</span><span class=p>]</span>
+  <span class=p>[</span><span class=n>jmp</span> <span class=k>for</span><span class=p>.</span><span class=n>head</span> <span class=o>|</span> <span class=n>jmp</span> <span class=k>for</span><span class=p>.</span><span class=n>tail</span><span class=p>]</span>
+  <span class=p>[</span><span class=n>jmp</span> <span class=k>for</span><span class=p>.</span><span class=n>head</span> <span class=o>|</span> <span class=n>jmp</span> <span class=k>for</span><span class=p>.</span><span class=n>tail</span><span class=p>]</span>
+  <span class=p>...</span>
+<span class=k>for</span><span class=p>.</span><span class=n>tail</span>
+</code></pre></td></tr></table></div></div><ol><li>jmp for.head: 对应于 continue，或单次循环执行完毕</li><li>jmp for.tail：对应于 break，或 for.cond 为 false</li></ol><p><a href=https://llvm.org/docs/LoopTerminology.html>LLVM Loop Terminology (and Canonical Forms)</a> 中对 loop 控制流的结构进行了定义：</p><ol><li>header：代码由循环外进入循环的唯一入口，header 将支配循环的所有节点。未优化时，对应于 for.cond 块</li><li>preheader：唯一进入循环(或外部跳转到 header)的代码块；无论有1个或多个进入循环的基础块，都称之为 entering block 或 loop predecessor</li><li>latch：跳转到 header 的代码块(jmp for.head)</li><li>backedge：latch 到 header 的边</li><li>exiting：跳转出循环的代码块(jmp for.tail)</li></ol><p><img src=https://llvm.org/docs/_images/loop-terminology.svg alt></p><h2 id=loop-simplify-form>Loop Simplify Form</h2><p><a href=https://llvm.org/docs/LoopTerminology.html#loop-simplify-form>Loop Simplify Form</a> 具备以下特征：</p><ol><li>仅有一个 preheader</li><li>仅有一个 latch，即仅有一个 backedge</li><li>不允许 exiting 存在循环外的 predecessor，即不应有循环外的 block 直接跳转到 exiting block，即所有 exiting 必须被 header 所支配</li></ol><h2 id=lcssaloop-closed-ssa>LCSSA(Loop Closed SSA)</h2><p><a href=https://llvm.org/docs/LoopTerminology.html#loop-closed-ssa-lcssa>Loop Closed SSA</a>：对于 SSA 形式的循环，定义在循环中的值仅能在循环内使用。</p><p>实现上，通过在循环外添加冗余的 phi 节点，指向循环中的值，这样当发生循环拷贝等优化行为时，只要修改循环外的 phi 节点即可。</p><h2 id=llvm-loop-vs-function>LLVM Loop vs Function</h2><p>若将循环体映射到函数域：</p><ol><li><p>Control Flow：header 相当于函数打头的基础块，并且包含了函数的<strong>形参</strong>，循环变更的值必须在 header 处收敛</p></li><li><p>Loop Simplify Form：仅有一个 preheader 约定了循环外的值循环内使用时，必须收敛一处，就像调用函数传递的<strong>实参</strong>一样</p></li><li><p>Loop Simplify Form：仅有一个 latch 约定了循环结构为最简单的单环，如存在 continue 的场景，将先跳转到 latch</p></li><li><p>LCSSA：约定了循环内的值循环外使用时，必须收敛一处，就像函数<strong>返回值</strong>一样。</p></li></ol><h2 id=simple-for-loop-in-llvm-ir>Simple For Loop in LLVM IR</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>const</span> <span class=kt>int</span> <span class=n>cnt</span> <span class=o>=</span> <span class=mi>10</span><span class=p>;</span>
+<span class=kt>int</span> <span class=nf>sum</span><span class=p>(</span><span class=kt>int</span> <span class=n>i</span><span class=p>,</span> <span class=kt>int</span> <span class=n>j</span><span class=p>)</span> <span class=n>__attribute__</span><span class=p>((</span><span class=n>noinline</span><span class=p>))</span> <span class=p>{</span>
+  <span class=k>return</span> <span class=n>i</span> <span class=o>+</span> <span class=n>j</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=kt>int</span> <span class=nf>loop</span><span class=p>()</span> <span class=p>{</span>
+  <span class=kt>int</span> <span class=n>s</span> <span class=o>=</span> <span class=mi>3</span><span class=p>;</span>
+  <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>cnt</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>s</span> <span class=o>=</span> <span class=n>sum</span><span class=p>(</span><span class=n>s</span><span class=p>,</span> <span class=n>i</span><span class=p>);</span>
+  <span class=p>}</span>
+  <span class=k>return</span> <span class=n>s</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><p>编译生成 llvm ir：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>clang++ -S -emit-llvm loop.cpp -o loop.ll
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>; Function Attrs: mustprogress noinline nounwind ssp uwtable
+define i32 @_Z4loopv() #0 {
+entry:
+  %s = alloca i32, align 4
+  %i = alloca i32, align 4
+  store i32 3, i32* %s, align 4
+  store i32 1, i32* %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %0, 4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, i32* %s, align 4
+  %2 = load i32, i32* %i, align 4
+  %call = call i32 @_Z3sumii(i32 %1, i32 %2)
+  store i32 %call, i32* %s, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, i32* %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, i32* %i, align 4
+  br label %for.cond, !llvm.loop !5
+
+for.end:                                          ; preds = %for.cond
+  %4 = load i32, i32* %s, align 4
+  ret i32 %4
+}
+</code></pre></td></tr></table></div></div><h1 id=simple-loop-full-unroll-route---compiled-with-o2>Simple Loop Full Unroll Route - Compiled with O2</h1><p>通过跟踪 O2 级别的编译优化日志，梳理出 loop full unroll 的主要 pass：</p><ol><li>SROA</li><li>LoopRotate</li><li>LoopUnrollFull</li><li>GVN</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>clang++ -S -emit-llvm -O2 -mllvm -print-after-all -o loop.O2.ll loop.cpp
+</code></pre></td></tr></table></div></div><h2 id=pass-sroascalar-replacement-of-aggregates>Pass: sroa(Scalar Replacement of Aggregates)</h2><p>用标量寄存器替换函数作用域内分配的聚合对象(array, struct)。</p><p>该 pass 执行具有两个特征：</p><ol><li>寄存器替换 alloca 的对象</li><li>生成 phi 节点</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>opt -S -debug-pass-manager -passes<span class=o>=</span><span class=s2>&#34;sroa&#34;</span> &lt; loop.ll
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>define i32 @_Z4loopv() #0 {
+entry:
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %s.0 = phi i32 [ 3, %entry ], [ %call, %for.inc ]
+  %i.0 = phi i32 [ 1, %entry ], [ %inc, %for.inc ]
+  %cmp = icmp slt i32 %i.0, 4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %call = call i32 @_Z3sumii(i32 %s.0, i32 %i.0)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %inc = add nsw i32 %i.0, 1
+  br label %for.cond, !llvm.loop !5
+
+for.end:                                          ; preds = %for.cond
+  ret i32 %s.0
+}
+</code></pre></td></tr></table></div></div><h2 id=pass-loop-rotate>Pass: loop-rotate</h2><p>将 for 循环转换为 do&mldr;while 循环，如：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c>  <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>n</span><span class=p>;</span> <span class=n>i</span> <span class=o>+=</span> <span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+    <span class=c1>// Loop body
+</span><span class=c1></span>  <span class=p>}</span>
+</code></pre></td></tr></table></div></div><p>转换为：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c data-lang=c>  <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>n</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+    <span class=k>do</span> <span class=p>{</span>
+      <span class=c1>// Loop body
+</span><span class=c1></span>      <span class=n>i</span> <span class=o>+=</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=p>}</span> <span class=k>while</span> <span class=p>(</span><span class=n>i</span> <span class=o>&lt;</span> <span class=n>n</span><span class=p>);</span>
+  <span class=p>}</span>
+</code></pre></td></tr></table></div></div><p>参考 <a href=https://en.wikipedia.org/wiki/Loop_inversion>wikipedia: Loop inversion</a> 该优化可以通过改善指令流水从而提升性能，同时也会将循环不变量外提的优化变得更加安全。</p><p>从 sroa pass 结果来看，循环中仍存在两个无法消除的跳转：for.cond -> [for.body | for.end]，for.inc -> for.cond。</p><p>经过反转之后，如下所示，就只剩下 for.inc -> [for.body | for.end]，而 for.inc -> for.cond 被消除，这是后续优化变得更加简单</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>opt -S -debug-pass-manager -passes<span class=o>=</span><span class=s2>&#34;sroa,loop-rotate&#34;</span> &lt; loop.ll
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>define i32 @_Z4loopv() #0 {
+entry:
+  br label %for.body
+
+for.body:                                         ; preds = %entry, %for.inc
+  %i.05 = phi i32 [ 1, %entry ], [ %inc, %for.inc ]
+  %s.04 = phi i32 [ 3, %entry ], [ %call, %for.inc ]
+  %call = call i32 @_Z3sumii(i32 %s.04, i32 %i.05)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %inc = add nsw i32 %i.05, 1
+  %cmp = icmp slt i32 %inc, 4
+  br i1 %cmp, label %for.body, label %for.end, !llvm.loop !5
+
+for.end:                                          ; preds = %for.inc
+  %s.0.lcssa = phi i32 [ %call, %for.inc ]
+  ret i32 %s.0.lcssa
+}
+</code></pre></td></tr></table></div></div><h2 id=pass-loop-unroll-full>Pass: loop-unroll-full</h2><p><a href=https://en.wikipedia.org/wiki/Loop_unrolling>Loop Unrolling</a> 将循环次数降低为原来的1/n，循环体单次处理原来n倍的任务，从而降低循环次数提升循环体内的并发度。当循环次数降低到1时，循环消除，称之为全展开(Loop Full Unroll)。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>opt -S -debug-pass-manager -passes<span class=o>=</span><span class=s2>&#34;sroa,loop-rotate,loop-unroll-full&#34;</span> -unroll-count<span class=o>=</span><span class=m>4</span> &lt; loop.ll
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>define i32 @_Z4loopv() #0 {
+entry:
+  br label %for.body
+
+for.body:                                         ; preds = %entry
+  %call = call i32 @_Z3sumii(i32 3, i32 1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %call.1 = call i32 @_Z3sumii(i32 %call, i32 2)
+  br label %for.inc.1
+
+for.inc.1:                                        ; preds = %for.inc
+  %call.2 = call i32 @_Z3sumii(i32 %call.1, i32 3)
+  br label %for.inc.2
+
+for.inc.2:                                        ; preds = %for.inc.1
+  ret i32 %call.2
+}
+</code></pre></td></tr></table></div></div><p>循环全展开的必要条件：</p><ol><li>通过 for.cond 可以在编译期计算出循环次数，循环次数在限定范围内(unroll count)</li><li>计量循环体的大小，并评估循环展开的开销，全展开的开销在限定范围内(const threshold)</li><li>必须是 Loop Simplify Form</li><li>必须是 LCSSA</li><li>循环体是否可安全复制，如循环体内不存在不可复制的指令</li></ol><h2 id=pass-gvnglobal-value-numbering>Pass: gvn(Global Value Numbering)</h2><p>GVN-PRE：Global Value Numbering and Partial Redundancy Elimination</p><p><a href=https://llvm.org/doxygen/GVN_8cpp_source.html>https://llvm.org/doxygen/GVN_8cpp_source.html</a>: 2481</p><blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// Merge unconditional branches, allowing PRE to catch more
+</span><span class=c1>// optimization opportunities.
+</span></code></pre></td></tr></table></div></div></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>opt -S -debug-pass-manager -passes<span class=o>=</span><span class=s2>&#34;sroa,loop-rotate,loop-unroll-full,gvn&#34;</span> -unroll-count<span class=o>=</span><span class=m>4</span> &lt; loop.ll
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>define i32 @_Z4loopv() #0 {
+entry:
+  %call = call i32 @_Z3sumii(i32 3, i32 1)
+  %call.1 = call i32 @_Z3sumii(i32 %call, i32 2)
+  %call.2 = call i32 @_Z3sumii(i32 %call.1, i32 3)
+  ret i32 %call.2
+}
+</code></pre></td></tr></table></div></div><h1 id=simple-loop-full-unroll-route---simplify>Simple Loop Full Unroll Route - Simplify</h1><h2 id=pass-mem2reg>Pass: mem2reg</h2><p>经分析，sroa pass 仅简化了 for loop 的结构，消除了 alloca 指令，用 mem2reg pass 或更为合适。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>opt -S -debug-pass-manager -passes<span class=o>=</span><span class=s2>&#34;mem2reg&#34;</span> &lt; loop.ll
+</code></pre></td></tr></table></div></div><p>转换结果与 sroa 相同：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>define i32 @_Z4loopv() #0 {
+entry:
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %i.0 = phi i32 [ 1, %entry ], [ %inc, %for.inc ]
+  %s.0 = phi i32 [ 3, %entry ], [ %call, %for.inc ]
+  %cmp = icmp slt i32 %i.0, 4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %call = call i32 @_Z3sumii(i32 %s.0, i32 %i.0)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %inc = add nsw i32 %i.0, 1
+  br label %for.cond, !llvm.loop !5
+
+for.end:                                          ; preds = %for.cond
+  ret i32 %s.0
+}
+</code></pre></td></tr></table></div></div><h2 id=pass-loop-unroll-full-1>Pass: loop-unroll-full</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>opt -S -debug-pass-manager -passes<span class=o>=</span><span class=s2>&#34;mem2reg,loop-unroll-full&#34;</span> &lt; loop.ll
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>define i32 @_Z4loopv() #0 {
+entry:
+  br label %for.cond
+
+for.cond:                                         ; preds = %entry
+  br label %for.body
+
+for.body:                                         ; preds = %for.cond
+  %call = call i32 @_Z3sumii(i32 3, i32 1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  br label %for.body.1
+
+for.body.1:                                       ; preds = %for.inc
+  %call.1 = call i32 @_Z3sumii(i32 %call, i32 2)
+  br label %for.inc.1
+
+for.inc.1:                                        ; preds = %for.body.1
+  br label %for.body.2
+
+for.body.2:                                       ; preds = %for.inc.1
+  %call.2 = call i32 @_Z3sumii(i32 %call.1, i32 3)
+  br label %for.inc.2
+
+for.inc.2:                                        ; preds = %for.body.2
+  br i1 false, label %for.body.3, label %for.end
+
+for.body.3:                                       ; preds = %for.inc.2
+  %call.3 = call i32 @_Z3sumii(i32 %call.2, i32 4)
+  br label %for.inc.3
+
+for.inc.3:                                        ; preds = %for.body.3
+  unreachable
+
+for.end:                                          ; preds = %for.inc.2
+  %s.0.lcssa = phi i32 [ %call.2, %for.inc.2 ]
+  ret i32 %s.0.lcssa
+}
+</code></pre></td></tr></table></div></div><p>未经过 loop-rotate 转换，冗余的分支节点明显多了很多:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>for.body:                                         ; preds = %for.cond
+  %call = call i32 @_Z3sumii(i32 3, i32 1)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  br label %for.body.1
+</code></pre></td></tr></table></div></div><p>而且产生了一个 unreachable 的循环边界(for.body.3, for.inc.3)：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>for.inc.2:                                        ; preds = %for.body.2
+  br i1 false, label %for.body.3, label %for.end
+
+for.body.3:                                       ; preds = %for.inc.2
+  %call.3 = call i32 @_Z3sumii(i32 %call.2, i32 4)
+  br label %for.inc.3
+
+for.inc.3:                                        ; preds = %for.body.3
+  unreachable
+</code></pre></td></tr></table></div></div><p><em>注：推测 unreachable 循环边界的产生是由于 llvm 中存在 DCE passes，所以 loop-unroll-full 在实现上未额外处理边界。</em></p><h2 id=pass-simplifycfg>Pass: simplifycfg</h2><p>gvn pass 虽然可以消除 <code>br</code> 直接跳转，但对于 <code>br const condition</code> 似乎无能为力。最后遇到的问题其实时候对于冗余或无效指令的清理，simplifycfg 比较合适。</p><p><a href=https://llvm.org/docs/Passes.html#simplifycfg-simplify-the-cfg>Simplify the CFG</a> 执行 DCE 以及基础块合并：</p><ol><li>移除无前驱的基础块</li><li>如果一个基础块有唯一的前驱，是前驱的唯一后继，则将当前基础块合并到前驱基础块</li><li>如果一个基础块有唯一的前驱，消除其中的 phi 节点</li><li>消除仅包含非条件跳转的基础块</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>opt -S -debug-pass-manager -passes<span class=o>=</span><span class=s2>&#34;mem2reg,loop-unroll-full,simplifycfg&#34;</span> -unroll-count<span class=o>=</span><span class=m>4</span> &lt; loop.ll
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>define i32 @_Z4loopv() #0 {
+entry:
+  %call = call i32 @_Z3sumii(i32 3, i32 1)
+  %call.1 = call i32 @_Z3sumii(i32 %call, i32 2)
+  %call.2 = call i32 @_Z3sumii(i32 %call.1, i32 3)
+  ret i32 %call.2
+}
+</code></pre></td></tr></table></div></div><h1 id=reference>Reference</h1><p>[1] LLVM Loop Terminology (and Canonical Forms). <a href=https://llvm.org/docs/LoopTerminology.html>https://llvm.org/docs/LoopTerminology.html</a></p><p>[2] LLVM’s Analysis and Transform Passes. <a href=https://llvm.org/docs/Passes.html#sroa-scalar-replacement-of-aggregates>https://llvm.org/docs/Passes.html#sroa-scalar-replacement-of-aggregates</a></p><p>[3] How LLVM Optimizes a Function. <a href=https://blog.regehr.org/archives/1603>https://blog.regehr.org/archives/1603</a></p><p>[4] The new intraprocedural Scalar Replacement of Aggregates. <a href="https://gcc.gnu.org/wiki/summit2010?action=AttachFile&do=get&target=jambor.pdf">https://gcc.gnu.org/wiki/summit2010?action=AttachFile&do=get&target=jambor.pdf</a></p><p>[5] GVN-PRE. <a href=https://gcc.gnu.org/wiki/GVN-PRE>https://gcc.gnu.org/wiki/GVN-PRE</a></p><p>[6] Loop unrolling. <a href=https://en.wikipedia.org/wiki/Loop_unrolling>https://en.wikipedia.org/wiki/Loop_unrolling</a></p></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>朦呆农码</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2022-01-18</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/llvm/>llvm</a>
+<a href=/tags/loop/>loop</a>
+<a href=/tags/optimization/>optimization</a></div><nav class=post-nav><a class=next href=/post/pg_sundry/git/git-merge/><span class="next-text nav-default">git merge</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:932394170@qq.com class="iconfont icon-email" title=email></a><a href=https://github.com/dreamonlysh/ class="iconfont icon-github" title=github></a><a href=https://www.guyuemeng.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2012 -
+2022<span class=heart><i class="iconfont icon-heart"></i></span><span>朦呆农码</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script></body></html>
