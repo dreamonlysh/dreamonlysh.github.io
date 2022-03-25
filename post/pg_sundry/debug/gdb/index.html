@@ -1,0 +1,237 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>core dump debug tools - gumeng's blog.</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="朦呆农码"><meta name=description content="core dump 问题 bt 显示 ?? gdb 版本过低 thread apply all bt 中完全无主程序的调试信息 1 2 3 Thread 1 (LWP 2528530): #0 0x00007f36376b7fff in ?? () #1 0x0000000000000000 in ?? () gdb program core 考虑 program 二进制文件与 core 文件是否一致。 thread apply all bt"><meta name=keywords content="Hugo,theme,even"><meta name=generator content="Hugo 0.83.1 with theme even"><link rel=canonical href=https://www.guyuemeng.com/post/pg_sundry/debug/gdb/><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link href=/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><meta property="og:title" content="core dump debug tools"><meta property="og:description" content="core dump 问题 bt 显示 ?? gdb 版本过低 thread apply all bt 中完全无主程序的调试信息 1 2 3 Thread 1 (LWP 2528530): #0 0x00007f36376b7fff in ?? () #1 0x0000000000000000 in ?? () gdb program core 考虑 program 二进制文件与 core 文件是否一致。 thread apply all bt"><meta property="og:type" content="article"><meta property="og:url" content="https://www.guyuemeng.com/post/pg_sundry/debug/gdb/"><meta property="article:section" content="post"><meta property="article:published_time" content="2022-03-21T17:38:11+08:00"><meta property="article:modified_time" content="2022-03-21T17:38:11+08:00"><meta itemprop=name content="core dump debug tools"><meta itemprop=description content="core dump 问题 bt 显示 ?? gdb 版本过低 thread apply all bt 中完全无主程序的调试信息 1 2 3 Thread 1 (LWP 2528530): #0 0x00007f36376b7fff in ?? () #1 0x0000000000000000 in ?? () gdb program core 考虑 program 二进制文件与 core 文件是否一致。 thread apply all bt"><meta itemprop=datePublished content="2022-03-21T17:38:11+08:00"><meta itemprop=dateModified content="2022-03-21T17:38:11+08:00"><meta itemprop=wordCount content="1060"><meta itemprop=keywords content="gdb,core,debug,"><meta name=twitter:card content="summary"><meta name=twitter:title content="core dump debug tools"><meta name=twitter:description content="core dump 问题 bt 显示 ?? gdb 版本过低 thread apply all bt 中完全无主程序的调试信息 1 2 3 Thread 1 (LWP 2528530): #0 0x00007f36376b7fff in ?? () #1 0x0000000000000000 in ?? () gdb program core 考虑 program 二进制文件与 core 文件是否一致。 thread apply all bt"><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.css><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/katex.min.js></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.3/contrib/auto-render.min.js></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=/ class=logo>朦呆农码</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=/><li class=mobile-menu-item>Home</li></a><a href=/post/><li class=mobile-menu-item>Archives</li></a><a href=/tags/><li class=mobile-menu-item>Tags</li></a><a href=/categories/><li class=mobile-menu-item>Categories</li></a><a href=/about/><li class=mobile-menu-item>About</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=/ class=logo>朦呆农码</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=/>Home</a></li><li class=menu-item><a class=menu-item-link href=/post/>Archives</a></li><li class=menu-item><a class=menu-item-link href=/tags/>Tags</a></li><li class=menu-item><a class=menu-item-link href=/categories/>Categories</a></li><li class=menu-item><a class=menu-item-link href=/about/>About</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>core dump debug tools</h1><div class=post-meta><span class=post-time>2022-03-21</span><div class=post-category><a href=/categories/debug/>debug</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><a href=#core-dump-问题>core dump 问题</a><ul><li><a href=#bt-显示-><code>bt</code> 显示 ??</a><ul><li><a href=#gdb-版本过低>gdb 版本过低</a></li><li><a href=#thread-apply-all-bt-中完全无主程序的调试信息><code>thread apply all bt</code> 中完全无主程序的调试信息</a></li><li><a href=#thread-apply-all-bt-中存在主程序的调试信息明显与主程序地址段不同的显示为-><code>thread apply all bt</code> 中存在主程序的调试信息，明显与主程序地址段不同的显示为 ??</a></li><li><a href=#dlopen-等方式加载的库缺失><code>dlopen</code> 等方式加载的库缺失</a></li><li><a href=#动态链接库存在部分函数名显示->动态链接库存在部分函数名显示 ??</a></li><li><a href=#干扰因素>干扰因素</a></li></ul></li></ul></li></ul></nav></div></div><div class=post-content><h1 id=core-dump-问题>core dump 问题</h1><h2 id=bt-显示-><code>bt</code> 显示 ??</h2><h3 id=gdb-版本过低>gdb 版本过低</h3><h3 id=thread-apply-all-bt-中完全无主程序的调试信息><code>thread apply all bt</code> 中完全无主程序的调试信息</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>Thread 1 (LWP 2528530):
+#0  0x00007f36376b7fff in ?? ()
+#1  0x0000000000000000 in ?? ()
+</code></pre></td></tr></table></div></div><blockquote><p>gdb program core</p></blockquote><p>考虑 program 二进制文件与 core 文件是否一致。</p><h3 id=thread-apply-all-bt-中存在主程序的调试信息明显与主程序地址段不同的显示为-><code>thread apply all bt</code> 中存在主程序的调试信息，明显与主程序地址段不同的显示为 ??</h3><ul><li>动态链接库缺失</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// dl.cpp
+</span><span class=c1></span><span class=kt>void</span> <span class=nf>dlthrow</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>throw</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=c1>// main.cpp
+</span><span class=c1></span><span class=kt>void</span> <span class=nf>dlthrow</span><span class=p>();</span>
+<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span><span class=o>*</span> <span class=n>argv</span><span class=p>[])</span> <span class=p>{</span>
+  <span class=n>dlthrow</span><span class=p>();</span>
+  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>g++ -shared -fPIC -o libdlthrow.so dl.cpp
+g++ -L./ -ldlthrow main.cpp
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>gdb a.out -c core.a.out-2640879-1648111582
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>warning: Can&#39;t open file /xxx/yyy/zzz/libdlthrow.so during file-backed mapping note processing
+[New LWP 2640879]
+
+warning: Could not load shared library symbols for /xxx/yyy/zzz/libdlthrow.so.
+</code></pre></td></tr></table></div></div><p>可以通过 <code>export LD_LIBRARY_PATH=/xxx/yyy/lib:$export LD_LIBRARY_PATH</code>进行配置，或 gdb 控制台执行 <code>set solib-search-path /xxx/yyy/zzz/</code>。</p><h3 id=dlopen-等方式加载的库缺失><code>dlopen</code> 等方式加载的库缺失</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// dl.cpp
+</span><span class=c1></span><span class=k>extern</span> <span class=s>&#34;C&#34;</span>
+<span class=kt>void</span> <span class=n>dlthrow</span><span class=p>()</span> <span class=p>{</span>
+  <span class=k>throw</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+<span class=p>}</span>
+
+<span class=c1>// main.cpp
+</span><span class=c1></span><span class=cp>#include</span> <span class=cpf>&#34;dlfcn.h&#34;</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span><span class=o>*</span> <span class=n>argv</span><span class=p>[])</span> <span class=p>{</span>
+  <span class=kt>void</span><span class=o>*</span> <span class=n>handler</span> <span class=o>=</span> <span class=n>dlopen</span><span class=p>(</span><span class=s>&#34;libdlthrow.so&#34;</span><span class=p>,</span> <span class=n>RTLD_LAZY</span><span class=p>);</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>handler</span> <span class=o>==</span> <span class=k>nullptr</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;handler is null&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+  <span class=p>}</span>
+  <span class=p>(</span><span class=kt>void</span><span class=p>)</span><span class=n>dlerror</span><span class=p>();</span>
+  <span class=k>auto</span> <span class=n>dlthrow</span> <span class=o>=</span> <span class=k>reinterpret_cast</span><span class=o>&lt;</span><span class=kt>void</span> <span class=p>(</span><span class=o>*</span><span class=p>)()</span><span class=o>&gt;</span><span class=p>(</span><span class=n>dlsym</span><span class=p>(</span><span class=n>handler</span><span class=p>,</span> <span class=s>&#34;dlthrow&#34;</span><span class=p>));</span>
+  <span class=k>if</span> <span class=p>(</span><span class=n>dlerror</span><span class=p>()</span> <span class=o>!=</span> <span class=k>nullptr</span><span class=p>)</span> <span class=p>{</span>
+    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;dlthrow is null&#34;</span> <span class=o>&lt;&lt;</span> <span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+    <span class=k>return</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span>
+  <span class=p>}</span>
+
+  <span class=n>dlthrow</span><span class=p>();</span>
+  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>g++ -shared -fPIC -o libdlthrow.so dl.cpp
+g++ -ldl main.cpp
+</code></pre></td></tr></table></div></div><p>gdb 加载 core 文件时提示库缺失，栈显示如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>#0  0x00007ff7304f9fff in raise () from /lib/x86_64-linux-gnu/libc.so.6
+#1  0x00007ff7304fb42a in abort () from /lib/x86_64-linux-gnu/libc.so.6
+#2  0x00007ff730e120ad in __gnu_cxx::__verbose_terminate_handler() () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#3  0x00007ff730e10066 in ?? () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#4  0x00007ff730e100b1 in std::terminate() () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#5  0x00007ff730e102c9 in __cxa_throw () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#6  0x00007ff7302c578b in ?? ()
+#7  0x00007ffed5edd540 in ?? ()
+#8  0x000055aa3ead8b0a in main ()
+</code></pre></td></tr></table></div></div><p>如 <code>#6</code>/<code>#7</code> 与 <code>#8</code> 地址段明显不同。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh>info sharedlibrary
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>From                To                  Syms Read   Shared Object Library
+0x00007ff731103d80  0x00007ff73110494e  Yes (*)     /lib/x86_64-linux-gnu/libdl.so.2
+0x00007ff730e0c7e0  0x00007ff730eb4d49  Yes (*)     /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+0x00007ff730a82680  0x00007ff730aee8da  Yes (*)     /lib/x86_64-linux-gnu/libm.so.6
+0x00007ff730868a90  0x00007ff730878895  Yes (*)     /lib/x86_64-linux-gnu/libgcc_s.so.1
+0x00007ff7304e6940  0x00007ff730610613  Yes (*)     /lib/x86_64-linux-gnu/libc.so.6
+0x00007ff731307aa0  0x00007ff731322fb0  Yes (*)     /lib64/ld-linux-x86-64.so.2
+                                        No          /xxx/yyy/zzz/libdlthrow.so
+</code></pre></td></tr></table></div></div><p>可以看到 /xxx/yyy/zzz/libdlthrow.so (有些 hack 的场景也可能看不到)。</p><p>但通过查看 mmap 映射区，可以通过地址精确的定位缺失的库为 libdlthrow.so (<code>#6</code> 0x00007ff7302c578b 对应地址段 [0x7ff7302c5000, 0x7ff7302c6000) /xxx/yyy/zzz/libdlthrow.so)。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>info proc map
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>Mapped address spaces:
+
+          Start Addr           End Addr       Size     Offset objfile
+      0x55aa3ead8000     0x55aa3ead9000     0x1000        0x0 /xxx/yyy/zzz/a.out
+      0x55aa3ecd9000     0x55aa3ecda000     0x1000     0x1000 /xxx/yyy/zzz/a.out
+      0x55aa3ecda000     0x55aa3ecdb000     0x1000     0x2000 /xxx/yyy/zzz/a.out
+      0x7ff7302c5000     0x7ff7302c6000     0x1000        0x0 /xxx/yyy/zzz/libdlthrow.so
+      0x7ff7302c6000     0x7ff7304c5000   0x1ff000     0x1000 /xxx/yyy/zzz/libdlthrow.so
+      0x7ff7304c5000     0x7ff7304c6000     0x1000        0x0 /xxx/yyy/zzz/libdlthrow.so
+      0x7ff7304c6000     0x7ff7304c7000     0x1000     0x1000 /xxx/yyy/zzz/libdlthrow.so
+      0x7ff7304c7000     0x7ff73065c000   0x195000        0x0 /lib/x86_64-linux-gnu/libc-2.24.so
+      0x7ff73065c000     0x7ff73085c000   0x200000   0x195000 /lib/x86_64-linux-gnu/libc-2.24.so
+      0x7ff73085c000     0x7ff730860000     0x4000   0x195000 /lib/x86_64-linux-gnu/libc-2.24.so
+      0x7ff730860000     0x7ff730862000     0x2000   0x199000 /lib/x86_64-linux-gnu/libc-2.24.so
+      0x7ff730866000     0x7ff73087c000    0x16000        0x0 /lib/x86_64-linux-gnu/libgcc_s.so.1
+      0x7ff73087c000     0x7ff730a7b000   0x1ff000    0x16000 /lib/x86_64-linux-gnu/libgcc_s.so.1
+      0x7ff730a7b000     0x7ff730a7c000     0x1000    0x15000 /lib/x86_64-linux-gnu/libgcc_s.so.1
+      0x7ff730a7c000     0x7ff730a7d000     0x1000    0x16000 /lib/x86_64-linux-gnu/libgcc_s.so.1
+      0x7ff730a7d000     0x7ff730b80000   0x103000        0x0 /lib/x86_64-linux-gnu/libm-2.24.so
+      0x7ff730b80000     0x7ff730d7f000   0x1ff000   0x103000 /lib/x86_64-linux-gnu/libm-2.24.so
+      0x7ff730d7f000     0x7ff730d80000     0x1000   0x102000 /lib/x86_64-linux-gnu/libm-2.24.so
+      0x7ff730d80000     0x7ff730d81000     0x1000   0x103000 /lib/x86_64-linux-gnu/libm-2.24.so
+      0x7ff730d81000     0x7ff730ef3000   0x172000        0x0 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.22
+      0x7ff730ef3000     0x7ff7310f3000   0x200000   0x172000 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.22
+      0x7ff7310f3000     0x7ff7310fd000     0xa000   0x172000 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.22
+      0x7ff7310fd000     0x7ff7310ff000     0x2000   0x17c000 /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.22
+      0x7ff731103000     0x7ff731106000     0x3000        0x0 /lib/x86_64-linux-gnu/libdl-2.24.so
+      0x7ff731106000     0x7ff731305000   0x1ff000     0x3000 /lib/x86_64-linux-gnu/libdl-2.24.so
+      0x7ff731305000     0x7ff731306000     0x1000     0x2000 /lib/x86_64-linux-gnu/libdl-2.24.so
+      0x7ff731306000     0x7ff731307000     0x1000     0x3000 /lib/x86_64-linux-gnu/libdl-2.24.so
+      0x7ff731307000     0x7ff73132a000    0x23000        0x0 /lib/x86_64-linux-gnu/ld-2.24.so
+      0x7ff73152a000     0x7ff73152b000     0x1000    0x23000 /lib/x86_64-linux-gnu/ld-2.24.so
+      0x7ff73152b000     0x7ff73152c000     0x1000    0x24000 /lib/x86_64-linux-gnu/ld-2.24.so
+</code></pre></td></tr></table></div></div><h3 id=动态链接库存在部分函数名显示->动态链接库存在部分函数名显示 ??</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>#0  0x00007f320d227fff in raise () from /lib/x86_64-linux-gnu/libc.so.6
+#1  0x00007f320d22942a in abort () from /lib/x86_64-linux-gnu/libc.so.6
+#2  0x00007f320db400ad in __gnu_cxx::__verbose_terminate_handler() () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#3  0x00007f320db3e066 in ?? () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#4  0x00007f320db3e0b1 in std::terminate() () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#5  0x00007f320db3e2c9 in __cxa_throw () from /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#6  0x0000555d9b9a47c8 in raiseException() ()
+#7  0x0000555d9b9a47dc in main ()
+</code></pre></td></tr></table></div></div><p>​ <code>#3</code> 可能原因为栈被破坏。</p><h3 id=干扰因素>干扰因素</h3><ul><li><p>C/C++ 语言添加编译选项 <code>-g</code></p><p><code>-g</code> 选项提供了行号信息，<code>-g</code> 选项带来的效果如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>#7  0x000055e9c75f9b0a in main (argc=1, argv=0x7ffdd4124638) at main.cpp:17
+</code></pre></td></tr></table></div></div><p>不包含 <code>-g</code> 选项时：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>#7  0x000055aa3ead8b0a in main ()
+</code></pre></td></tr></table></div></div><p>该选项对于 <code>bt</code> 显示 ?? 并无帮助，但可以使用诸如 <code>list &lt;function-name></code> 等 gdb 命令。</p></li><li><p>Go 语言添加编译选项 <code>-gcflags "-N -l"</code></p><p>其中 <code>-N</code> 禁止优化，<code>-l</code> 禁止内联，对于 <code>bt</code> 显示 ?? 亦无帮助。</p></li><li><p>gdb 加载 Go 插件 runtime-gdb.py</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-sh data-lang=sh><span class=nb>source</span> /usr/local/go/src/runtime/runtime-gdb.py
+</code></pre></td></tr></table></div></div><p>runtime-gdb.py 主要提供了 <code>$len()</code>、<code>$cap()</code>、<code>$dtype()</code> 以及 goroutine 相关的查看，对于 <code>bt</code> 显示 ?? 同样无帮助。</p><p>参考：<a href=https://go.dev/doc/gdb>Debugging Go Code with GDB</a></p></li></ul></div><div class=post-copyright><p class=copyright-item><span class=item-title>Author</span>
+<span class=item-content>朦呆农码</span></p><p class=copyright-item><span class=item-title>LastMod</span>
+<span class=item-content>2022-03-21</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/gdb/>gdb</a>
+<a href=/tags/core/>core</a>
+<a href=/tags/debug/>debug</a></div><nav class=post-nav><a class=next href=/post/pg_llvm/llvm-loop-optimization-full-unroll/><span class="next-text nav-default">LLVM Loop Optimization - Full Unroll</span>
+<span class="next-text nav-mobile">Next</span>
+<i class="iconfont icon-right"></i></a></nav></footer></article></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:932394170@qq.com class="iconfont icon-email" title=email></a><a href=https://github.com/dreamonlysh/ class="iconfont icon-github" title=github></a><a href=https://www.guyuemeng.com/index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2012 -
+2022<span class=heart><i class="iconfont icon-heart"></i></span><span>朦呆农码</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js></script></body></html>
